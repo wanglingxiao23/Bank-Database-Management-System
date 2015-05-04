@@ -1,0 +1,162 @@
+body,p,h1,h2,h3,h4,h5,h6,blockquote,ul,ol,li,dl,dt,dd,pre,form,fieldset,legend,button,input,textarea,table,tr,th,td{margin:0;padding:0}
+li{list-style-type: none;}
+.main-cont{ width:97%;margin:20px;font-size:14px}
+.main-cont1{ width:70%;margin:20px auto 0 auto;font-size:14px}
+.red{color: red;}
+.tab_change {
+	color: #636669;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #e1e1e1;
+}
+.cf:before,.cf:after{content:"";display:table}.cf:after{clear:both}.cf{zoom:1}
+.order-list-check #tab li.check ,.order-list-check ul li:hover{background: url(../img/but_green.png) no-repeat;border-bottom: none;}
+.unline,.unline a,a{text-decoration:none}
+.select-wrap{ background:#fff ;border:1px solid #e2e2e2; border-radius:3px; padding:20px !important;font-size:16px;}
+.select-wrap span{margin-left:30px;}
+.select-wrap span a{margin:0 8px;}
+.mt10{margin-top:10px}.mt20{margin-top:20px}
+.tc{text-align:center}.tl{text-align:left}.tr{text-align:right}
+.ora_div .title_ul {
+	border-left: 1px solid #ccc;
+	width: 100%;
+	margin: 10px 0;
+}
+.ora_div{
+	min-width: 1100px;
+}
+.pager {
+	margin-top: 20px;
+	margin-bottom: 30px;
+	zoom: 1;
+	clear: both;
+	display: table;
+	float: right;
+}
+.welcome{
+    margin: 10px 0 0 40px;
+    font-size: 16px;
+}
+.welcome label{color: red; font-size: 20px;margin-right:5px;}
+.setUserInfo{
+    float: right;
+    margin-right: 10px;
+}
+/*=====author wlx=====*/
+
+.tab_change {
+	color: #636669;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #e1e1e1;
+}
+.tab_change li {
+	float: left;
+	margin-right: 5px;
+}
+.tab_change li.check a {
+	border-bottom: 2px solid #229b78;
+	background: url(tab_change.png) center bottom no-repeat;
+}
+.tab_change li a {
+	display: inline-block;
+	padding: 0 5px;
+	height: 39px;
+	line-height: 39px;
+	color: #636669;
+}
+
+/*======查询========*/
+.bus-search{
+    height: 30px !important;
+    width: 200px !important;
+    margin: 15px 0 15px 20px !important;
+}
+.bus-search-label{
+      font-size: 14px;
+      height: 32px !important;
+      width: 55px;
+      color: #333 !important;
+      font-family: microsoft yahei;
+}
+.bus-search-label:hover{
+    background: #ccc;
+}
+/*======表格========*/
+.list-wid80{
+    width: 80% !important;
+}
+.ora_list{
+    width: 99.8%;
+}
+.list-wid18{
+    width: 18%;
+    min-width: 100px;
+}
+.list-wid21{
+    width: 20.6%;
+}
+.list-wid25{
+    width: 25%;
+}
+.list-01{
+    width: 24.7%;
+}
+.list_con{
+    padding: 20px 0 35px 0;
+}
+.mt10{
+    margin-top: -10px;
+}
+.repair_label{
+    display: block;
+}
+/*========artDialog========*/
+.art-name{
+    display: block;
+    margin-left: 20px;
+}
+.art-name p{
+    display: inline-block;
+    font-size: 14px;
+}
+.art-name input{
+    width: 170px !important;
+}
+.art-tel{
+    display: block;
+    margin: 10px 0 0 -8px;
+}
+.art-tel p{
+    display: inline-block;
+    font-size: 14px;
+}
+.art-tel input{
+    width: 170px !important;
+}
+.art-balance{
+    font-size: 16px;
+    margin: 0 0 10px 5px;
+}
+.status{
+    color: red;
+    margin-left: 50px;
+}
+#withdrawAmount{
+    width: 200px;
+}
+#payPassword{
+    margin-top: 10px;
+}
+.withdraw{
+    float: right;
+    margin: -26px -80px 0 0;
+    display: none;
+    font-size: 14px;
+}
+#pay{
+    width:130px;
+}
+#rechargeAmount{
+    width: 200px;
+}

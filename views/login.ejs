@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Conpatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
+    <!-- 以下2个插件是用于在IE8支持HTML5元素和媒体查询的，如果不用可移除 -->
+    <!-- 注意：Respond.js不支持file://方式的访问 -->
+    <!-- [if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <[endif] -->
+</head>
+<body>
+<div id="bglogin" style="margin-top: 257px;">
+    <div class="loginPicBox1"><img src="/img/loginPic01.png"></div>
+    <div class="loginPicBox2"><img src="/img/loginPic02.png"></div>
+    <!--loginPicBox-->
+    <div class="loginLeft">
+        <div class="loginLogoText">呵呵</div>
+        <img class="loginLeftbg" src="/img/loginLeftbg.png">
+    </div>
+    <!--loginLeft-->
+
+    <div class="loginRight">
+        <div class="call"><img src="/img/call.png">呵呵</div>
+        <!--call-->
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#user" data-toggle="tab">用户登陆</a></li>
+            <li class=""><a href="#admin" data-toggle="tab">管理员登陆</a></li>
+        </ul>
+        <!--用户inputBox-->
+        <div class="inputBox tab-content">
+            <div class="tab-pane active" id="user">
+                <div class="inputBT">
+                    <label>用户名：</label>
+                    <input name="" id="loginname" type="text">
+                </div>
+                <div class="inputBT">
+                    <label>密码：</label>
+                    <input name="" id="nloginpwd" type="password">
+                </div>
+                <div class="clear"></div>
+                <div class="ButtonPa1">
+                    <button type="submit" class="mr30 btn btn-primary btn-lg">登陆</button>
+                    <a href="/reg" class="btn btn-info btn-lg" >注册</a>
+                </div>
+                <!--Button001-->
+            </div>
+            <div class="tab-pane" id="admin">
+                <div class="inputBT">
+                    <label>手机号码：</label>
+                    <input name="" id="loginname" type="text">
+                </div>
+                <div class="inputBT">
+                    <label>密码：</label>
+                    <input name="" id="nloginpwd" type="password">
+                </div>
+                <div class="clear"></div>
+                <div class="ButtonPa1">
+                    <button type="submit" class="mr30 btn btn-primary btn-lg">登陆</button>
+                    <a href="/add" class="btn btn-info btn-lg">注册</a>
+                </div>
+                <!--Button001-->
+            </div>
+            <!--inputBox-->
+            <!--icheckBox-->
+
+            <div class="clear"></div>
+            <div class="loginRightFoot">呵呵</div>
+            <!--loginRightFoot-->
+        </div>
+        <!--inputBox-->
+    </div>
+    <!--loginRight-->
+</div>
+<script src="/js/jquery-2.1.1.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

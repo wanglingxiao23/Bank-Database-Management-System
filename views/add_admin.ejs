@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Conpatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/register.css" rel="stylesheet">
+    <!-- 以下2个插件是用于在IE8支持HTML5元素和媒体查询的，如果不用可移除 -->
+    <!-- 注意：Respond.js不支持file://方式的访问 -->
+    <!-- [if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <[endif] -->
+</head>
+<body>
+<div class="reg">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="glyphicon glyphicon-user">添加新管理员</h3>
+        </div>
+        <div class="panel-body cbody">
+            <form id="add_admin" action="" method="post">
+                <legend>管理员信息</legend>
+                <div>
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">姓名：</span>
+                        <input type="text" class="form-control" name="adminName" id="adminName">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label name-null" for="inputError">请输入姓名！</label>
+                </div>
+                <div class="">
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">手机号码：</span>
+                        <input type="text" class="form-control" name="adminTel" id="adminTel">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label tel-warning" for="inputWarning">该号码已被注册！</label>
+                    <label class="control-label tel-error" for="inputError">请输入正确的11位手机号码！</label>
+                </div>
+                <div>
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">登陆密码：</span>
+                        <input type="password" class="form-control" name="adminPsd" id="password">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label psd-null" for="inputError">请输入密码！</label>
+                </div>
+                <div class>
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">再次输入：</span>
+                        <input type="password" class="form-control" id="rePassword">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label psd-error" for="inputError">两次密码输入不一致！</label>
+                </div>
+                <div class="ButtonPa1 tc">
+                    <button type="submit" class="mr30 btn btn-default btn-lg" id="addadmin" disabled>添加</button>
+                    <button type="button" class="btn btn-default btn-lg">取消</button>
+                </div>
+            </form>
+        </div>
+        <div class="panel-footer tc">
+            <p>大工厂银行版权所有-广ICP备110222222-广公网安备1101080222222</p>
+        </div>
+    </div>
+</div>
+<script src="/js/jquery-2.1.1.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/index.js"></script>
+</body>
+</html>

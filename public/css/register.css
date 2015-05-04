@@ -1,0 +1,42 @@
+@charset "utf-8";
+body{ 
+    font-family:'Microsoft YaHei','Arial, Helvetica, sans-rif';
+    font-size:12px; 
+    color:#000; 
+    background:url(../img/login.jpg) no-repeat; 
+    margin:0; 
+    padding:0; 
+    overflow-x:hidden;
+    overflow-y:hidden;
+}
+.mr30{margin-right: 15px;}
+/*=======================正文样式=======================*/
+.reg{
+    width: 1000px;
+    height: 800px;
+    background: #f1f1f2;
+    margin: auto;
+    margin-top: 80px;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05)
+}
+.cbody{
+    height: 665px;
+}
+.input_position{
+    width: 400px;
+    margin: 10px 0 0 250px;
+}
+.tc{
+    text-align: center;
+}
+.ButtonPa1{ 
+    margin:50px 50px 0 0;
+}
+.tel-error,.tel-warning,.psd-error,.name-null,.psd-null,.user-warning,.user-error{
+    float: right;
+    margin: -25px 130px 0 0;
+    display: none;
+}
+
