@@ -3,8 +3,10 @@ var router = express.Router();
 var conn = require('db');
 var mysql = require('mysql');
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('login');
+router.get('/',checkLogin());
+router.get('/',function(req,res,next){
+    req.cookies = parseCookie(req.headers.cookie);
+    var adminid = req.cookies.adminid;
 });
 
 
@@ -14,38 +16,45 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login/admin',function(req,res,next) {
-    var adminTel = req.body.adminTel;
-    var adminPsd = req.body.adminPsd;
-    var conn = mysql.createConnection({
-        //host: 'localhost',
-        user: 'root',
-        password: '123456'
-        //database: 'bank_system',
-        //port: 3306
-    });
-    if(conn.connect()) {
-        conn.query('select adminid from admin_info where admin_tel=' + adminTel + 'and admin_psd=' + adminPsd, function (error, results) {
+    var adminTel = req.body.admintel;
+    var adminPsd = req.body.adminpsd;
+    console.log(req.body);
+    conn.connect();
+        conn.query('select * from admin_info where admin_tel="'+adminTel+'"and admin_psd="'+adminPsd+'"', function (error, results) {
+            console.log(results);
             if (error) {
                 console.log(error.message);
-                //req.flash('error',error.message);
                 res.redirect('/404');
             } else if (results == '' || results == null) {
-                //req.flash('info','用户名和密码不符合！');
-                res.redirect('/login');
+                res.send(200,{data:1});
             } else {
-                var url = '/login/admin/' + results;
-                console.log(url);
-                res.writeHead(200, {'Set-Cookie': 'adminid=' + results,
-                    'Content-Type': 'text/plain'
-                });
-                res.end(url);
+                var adminid = results[0].adminid;
+                res.setHeader('Set-Cookie','"adminid"="' + adminid+'"')
+                res.send(200,{data:0});
             }
         });
-    }else{
-        console.log('出粗啦');
-    }
     conn.end();
-})
+});
+router.post('/login/user',function(req,res,next) {
+    var username = req.body.username;
+    var userpsd = req.body.userpsd;
+    console.log(req.body);
+    conn.connect();
+    conn.query('select * from user where username="'+username+'"and userpsd="'+userpsd+'"', function (error, results) {
+        console.log(results);
+        if (error) {
+            console.log(error.message);
+            res.redirect('/404');
+        } else if (results == '' || results == null) {
+            res.send(200,{data:1});
+        } else {
+            var adminid = results[0].userid;
+            res.setHeader('Set-Cookie','"userid"="' + userid+'"')
+            res.send(200,{data:0});
+        }
+    });
+    conn.end();
+});
 
 /* GET register page. */
 router.get('/reg', function(req, res, next) {
@@ -98,4 +107,24 @@ router.get('/404', function(req, res, next) {
     res.render('404');
 });
 
+function checkLogin(req, res, next) {
+    req.cookies = parseCookie(req.headers.cookie);
+    if (!req.cookies.adminid) {
+        res.redirect('/login');
+    }
+    next();
+}
+
+function parseCookie(cookie){
+    var cookies = {};
+    if(!cookie){
+        return cookies;
+    }
+    var list = cookie.split(";");
+    for(var i=0;i<list.length;i++){
+        var pair = list[i].split("=");
+        cookies[pair[0].trim()] = pair[1];
+    }
+    return cookies;
+}
 module.exports = router;

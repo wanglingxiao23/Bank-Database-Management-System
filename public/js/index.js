@@ -363,3 +363,58 @@ function checkPayPsd(userId,$this){
         $this.next().show();
     }
 }
+//================================================================================================//
+function adminlogin(){
+    var admintel = $("#admintel").val();
+    var adminpsd = $("#adminpsd").val();
+    var data = {"admintel":admintel,"adminpsd":adminpsd};
+    var jsondata = JSON.stringify(data);
+    $.ajax({
+        url : '/login/admin',
+        type : 'post',
+        data : jsondata,
+        contentType : 'application/json',
+        success : function(rel){
+            if(rel.data == 0){
+                window.location.href = '/reg';
+            }else if(rel.data == 1){
+                alert("用户名和密码不符！");
+                window.location.href = '/login';
+            }else{
+                alert("输入错误！");
+                window.location.href = '/login';
+            }
+        },
+        error : function(){
+            alert("登录失败！");
+            window.location.href = '/login';
+        }
+    });
+}
+function userlogin(){
+    var username = $("#username").val();
+    var userpsd = $("#userpsd").val();
+    var data = {"username":username,"userpsd":userpsd};
+    var jsondata = JSON.stringify(data);
+    $.ajax({
+        url : '/login/user',
+        type : 'post',
+        data : jsondata,
+        contentType : 'application/json',
+        success : function(rel) {
+            if (rel.data == 0) {
+                window.location.href = '/reg';
+            } else if (rel.data == 1) {
+                alert("用户名和密码不符！");
+                window.location.href = '/login';
+            } else {
+                alert("输入错误！");
+                window.location.href = '/login';
+            }
+        },
+        error : function(){
+            alert("登录失败！");
+            window.location.href = '/login';
+        }
+    });
+}

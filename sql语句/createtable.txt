@@ -1,14 +1,14 @@
 create database bank_system;
 
 create table user(
-id int primary key auto_increment,
+userid int primary key auto_increment,
 username varchar not null,
 password varchar not null,
-limits int not null
+limits int(1) not null
 )engine=InnoDB default charset=utf8;
 
 create table user_info(
-id int primary key not null,
+userid int primary key not null,
 user_name varchar(16) not null,
 user_tel bigint not null,
 ID_no bigint not null,
@@ -18,19 +18,20 @@ paypsd varchar(16) not null
 )engine=InnoDB default charset=utf8;
 
 create table property(
-id int primary key,
+userid int primary key,
 sum int not null
 )engine=InnoDB default charset=utf8;
 
 create table history(
-id int primary key,
+userid int primary key,
 amount double not null,
 status int not null,
 date timestamp null default now()
 )engine=InnoDB default charset=utf8;
 
 create table admin_info(
-id int primary key,
+adminid int primary key,
 admin_name varchar(16) not null,
-admin_tel bigint not null
+admin_tel bigint not null,
+admin_psd varchar(16) not null
 )engine=InnoDB default charset=utf8;
