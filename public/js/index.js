@@ -376,7 +376,7 @@ function adminlogin(){
         contentType : 'application/json',
         success : function(rel){
             if(rel.data == 0){
-                window.location.href = '/reg';
+                window.location.href = '/';
             }else if(rel.data == 1){
                 alert("用户名和密码不符！");
                 window.location.href = '/login';
@@ -403,7 +403,7 @@ function userlogin(){
         contentType : 'application/json',
         success : function(rel) {
             if (rel.data == 0) {
-                window.location.href = '/reg';
+                window.location.href = '/';
             } else if (rel.data == 1) {
                 alert("用户名和密码不符！");
                 window.location.href = '/login';

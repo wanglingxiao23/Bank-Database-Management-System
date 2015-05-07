@@ -1,12 +1,32 @@
 var express = require('express');
 var router = express.Router();
 var conn = require('db');
-var mysql = require('mysql');
+
+//生成一个session//
+var sessions = {};
+var key = 'session_id';
+var ECPIRES = 20 * 60 * 1000;
+var generate = function(){
+    var session = {};
+    session.id = (new Date()).getTime() + Math.random();
+    session.cookie = {
+        expire: (new Date()).getTime() + ECPIRES
+    };
+    sessions[session.id] = session;
+    return session;
+};
+//============//
+
 /* GET home page. */
-router.get('/',checkLogin());
 router.get('/',function(req,res,next){
-    req.cookies = parseCookie(req.headers.cookie);
-    var adminid = req.cookies.adminid;
+    console.log(req.session);
+    if (!req.session.adminid) {
+        res.redirect('/login');
+    }else{
+        req.cookies = parseCookie(req.get(cookie));
+        var adminid = req.session.adminid;
+        console.log(adminid);
+    }
 });
 
 
@@ -29,7 +49,8 @@ router.post('/login/admin',function(req,res,next) {
                 res.send(200,{data:1});
             } else {
                 var adminid = results[0].adminid;
-                res.setHeader('Set-Cookie','"adminid"="' + adminid+'"')
+                req.session.adminid = adminid;
+                //res.setHeader('Set-Cookie','"adminid"="' + adminid+'"')
                 res.send(200,{data:0});
             }
         });
@@ -107,24 +128,5 @@ router.get('/404', function(req, res, next) {
     res.render('404');
 });
 
-function checkLogin(req, res, next) {
-    req.cookies = parseCookie(req.headers.cookie);
-    if (!req.cookies.adminid) {
-        res.redirect('/login');
-    }
-    next();
-}
 
-function parseCookie(cookie){
-    var cookies = {};
-    if(!cookie){
-        return cookies;
-    }
-    var list = cookie.split(";");
-    for(var i=0;i<list.length;i++){
-        var pair = list[i].split("=");
-        cookies[pair[0].trim()] = pair[1];
-    }
-    return cookies;
-}
 module.exports = router;
