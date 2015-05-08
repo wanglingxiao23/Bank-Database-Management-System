@@ -5,25 +5,69 @@ var conn = require('db');
 //生成一个session//
 var sessions = {};
 var key = 'session_id';
-var ECPIRES = 20 * 60 * 1000;
+var EXPIRES = 20 * 60 * 1000;
 var generate = function(){
     var session = {};
     session.id = (new Date()).getTime() + Math.random();
     session.cookie = {
-        expire: (new Date()).getTime() + ECPIRES
+        expire: (new Date()).getTime() + EXPIRES
     };
     sessions[session.id] = session;
     return session;
 };
 //============//
+/*function (req,res){
+    //====检测session===//
+    var id = req.cookies[key];
+    if(!id){
+        req.session = generate();
+    }else{
+        var session = session[id];
+        if(session){
+            if(session.cookie.expire>(new Date()).getTime()){
+                //更新超时时间
+                session.cookie.expire = (new Date()).getTime() + EXPIRES;
+                req.session = session;
+            }else{
+                //超时了，删除旧的数据，并重新生成
+                delete sessions[id];
+                req.session = generate();
+            }
+        }else{
+            //如果session过期或口令不对，重新生成session
+            req.session = generate();
+        }
+    }
+}*/
 
 /* GET home page. */
 router.get('/',function(req,res,next){
+    //====检测session===//
+    var id = req.cookies[key];
+    console.log(id);
+    if(!id){
+        req.session = generate();
+    }else{
+        var session = session[id];
+        if(session){
+            if(session.cookie.expire>(new Date()).getTime()){
+                //更新超时时间
+                session.cookie.expire = (new Date()).getTime() + EXPIRES;
+                req.session = session;
+            }else{
+                //超时了，删除旧的数据，并重新生成
+                delete sessions[id];
+                req.session = generate();
+            }
+        }else{
+            //如果session过期或口令不对，重新生成session
+            req.session = generate();
+        }
+    }
     console.log(req.session);
     if (!req.session.adminid) {
         res.redirect('/login');
     }else{
-        req.cookies = parseCookie(req.get(cookie));
         var adminid = req.session.adminid;
         console.log(adminid);
     }
@@ -36,6 +80,28 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login/admin',function(req,res,next) {
+    //session检测
+    var id = req.cookies[key];
+    if(!id){
+        req.session = generate();
+    }else{
+        var session = session[id];
+        if(session){
+            if(session.cookie.expire>(new Date()).getTime()){
+                //更新超时时间
+                session.cookie.expire = (new Date()).getTime() + EXPIRES;
+                req.session = session;
+            }else{
+                //超时了，删除旧的数据，并重新生成
+                delete sessions[id];
+                req.session = generate();
+            }
+        }else{
+            //如果session过期或口令不对，重新生成session
+            req.session = generate();
+        }
+    };
+    //===handle====//
     var adminTel = req.body.admintel;
     var adminPsd = req.body.adminpsd;
     console.log(req.body);
@@ -50,6 +116,7 @@ router.post('/login/admin',function(req,res,next) {
             } else {
                 var adminid = results[0].adminid;
                 req.session.adminid = adminid;
+                console.log(req.session);
                 //res.setHeader('Set-Cookie','"adminid"="' + adminid+'"')
                 res.send(200,{data:0});
             }
