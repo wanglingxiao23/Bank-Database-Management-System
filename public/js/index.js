@@ -375,15 +375,15 @@ function adminlogin(){
         data : jsondata,
         contentType : 'application/json',
         success : function(rel){
-            if(rel.data == 0){
-                window.location.href = '/';
-            }else if(rel.data == 1){
-                alert("用户名和密码不符！");
-                window.location.href = '/login';
-            }else{
-                alert("输入错误！");
-                window.location.href = '/login';
-            }
+            //if(rel.data == 0){
+               //return;
+            //}else if(rel.data == 1){
+                //alert("用户名和密码不符！");
+               // window.location.href = '/login';
+            //}else{
+               // alert("输入错误！");
+                //window.location.href = '/login';
+           // }
         },
         error : function(){
             alert("登录失败！");
@@ -403,7 +403,8 @@ function userlogin(){
         contentType : 'application/json',
         success : function(rel) {
             if (rel.data == 0) {
-                window.location.href = '/';
+                window.location.href = '/userindex';
+                return;
             } else if (rel.data == 1) {
                 alert("用户名和密码不符！");
                 window.location.href = '/login';
