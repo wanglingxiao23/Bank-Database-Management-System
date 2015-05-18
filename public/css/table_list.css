@@ -63,7 +63,7 @@ a:hover{
 	background: #f6f6f6;
 	height: 60px;
 	line-height: 60px;
-	margin:0!important;
+	margin:0 !important;
 	text-indent: 15px;
 	margin-right: 10px;
 	display: inline-block;
@@ -102,7 +102,7 @@ input[type="text"]{
 	display: inline-block;
 	width: 74px;
 	height: 13px;
-	background:url(../../img/to_drop.png) no-repeat;
+	background:url(/img/to_drop.png) no-repeat;
 	margin: 0 auto;
 }
 .indent{
@@ -117,7 +117,7 @@ input[type="text"]{
 	display: none;
 	width: 105px;
 	height: 34px;
-	background: url(../../img/mess_bg.png)  no-repeat;
+	background: url(/img/mess_bg.png)  no-repeat;
 	line-height: 25px;
 	text-align: center;
 	color: #ff6c02;

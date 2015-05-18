@@ -5,7 +5,7 @@ var conn = require('db');
 /* GET home page. */
 
 router.get('/',function(req,res){
-        res.render('userIndex');
+        res.render('login');
 });
 
 /* GET login page. */
@@ -55,26 +55,90 @@ router.post('/login/user',function(req,res,next) {
 router.get('/userindex',checkUserLogin);
 router.get('/userindex',function(req,res){
     var userid = req.session.userid;
-    console.log(userid);
     var user = {};
+    var notes = [];
+    var note = {};
     conn.query('select user_name from user_info where userid="'+userid+'"',function(error,results){
         if(error){
             console.log(error.message);
             res.redirect('/404');
         }else{
             user.name = results[0].user_name;
-            console.log(user);
-            res.render('userIndex',{user:user});
+            conn.query('select * from property where userid="'+userid+'"',function(error,results){
+                if(error){
+                    console.log(error.message);
+                    res.redirect('/404');
+                }else{
+                    user.property = results[0].sum;
+                    conn.query('select * from history where userid="'+userid+'"',function(error,results){
+                        if(error){
+                            console.log(error.message);
+                            res.redirect('/404');
+                        }else{
+                            console.log(results);
+                            for(var i=0;i<results.length;i++){
+                                note.date = results[i].date;
+                                note.status = results[i].status;
+                                note.amount = results[i].amount;
+                                notes.push(note);
+                            }
+                            console.log(user);
+                            console.log(notes);
+                            res.render('userIndex',{user:user,notes:notes});
+                        }
+                    });
+                }
+            });
+        }
+    });
+});
+router.get('/adminindex',checkUserLogin);
+router.get('/adminindex',function(req,res){
+    var adminid = req.session.adminid;
+    var admin = {};
+    var accounts = [];
+    var account = {};
+    conn.query('select admin_name from admin_info where adminid="'+adminid+'"',function(error,results){
+        if(error){
+            console.log(error.message);
+            res.redirect('/404');
+        }else{
+            admin.name = results[0].admin_name;
+            conn.query('select * from property where userid="'+userid+'"',function(error,results){
+                if(error){
+                    console.log(error.message);
+                    res.redirect('/404');
+                }else{
+                    user.property = results[0].sum;
+                    conn.query('select * from history where userid="'+userid+'"',function(error,results){
+                        if(error){
+                            console.log(error.message);
+                            res.redirect('/404');
+                        }else{
+                            console.log(results);
+                            for(var i=0;i<results.length;i++){
+                                note.date = results[i].date;
+                                note.status = results[i].status;
+                                note.amount = results[i].amount;
+                                notes.push(note);
+                            }
+                            console.log(user);
+                            console.log(notes);
+                            res.render('userIndex',{user:user,notes:notes});
+                        }
+                    });
+                }
+            });
         }
     });
 });
 
 
 
-
 /* GET register page. */
 router.get('/reg', function(req, res, next) {
-    res.render('register');
+    var cardNum = Math.floor(Math.random()*Math.pow(10,9));
+    res.render('register',{cardNum:cardNum});
 });
 
 router.post('/reg', function(req, res, next) {

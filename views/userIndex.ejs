@@ -22,7 +22,7 @@
 
     <form name="supplyForm" method="post" action="" id="supplyForm">
         <div class="select-wrap  mt20">
-            <span>当前的余额有<a href="javascript:;" class="red">1000</a>元</span>
+            <span>当前的余额有<a href="javascript:;" class="red"><%= user.property %></a>元</span>
             <span><a type="button" class="btn btn-warning" onclick="recharge()">充值</a></span>
             <span><a type="button" class="btn btn-warning" onclick="withdraw()">取款</a></span>
         </div>
@@ -40,55 +40,23 @@
             </ul>
             <div class="ora_con cf">
                 <!-- ora_list -->
+                <% if(notes.length) { %>
+                <% notes.forEach(function(note) { %>
                 <div class="ora_list cf">
                     <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">2015.05.03</b></span>
+                        <span class="list-wid25"><b class="repair_label"><%= note.date %></b></span>
                         <span class="list-wid18"><b class="repair_label">银行转账</b></span>
-                        <span class="list-wid21"><b class="repair_label red">30</b></span>
+                        <span class="list-wid21"><b class="repair_label red"><%= note.amount %></b></span>
+                        <% if(note.status == 0) { %>
                         <span class="list-wid18"><b class="repair_label">存入</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="delete()">删除记录</a></span>
-                    </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">2015.05.03</b></span>
-                        <span class="list-wid18"><b class="repair_label">银行转账</b></span>
-                        <span class="list-wid21"><b class="repair_label red">30</b></span>
-                        <span class="list-wid18"><b class="repair_label">存入</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="delete()">删除记录</a></span>
-                    </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">2015.05.03</b></span>
-                        <span class="list-wid18"><b class="repair_label">银行转账</b></span>
-                        <span class="list-wid21"><b class="repair_label red">30</b></span>
-                        <span class="list-wid18"><b class="repair_label">存入</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="delete()">删除记录</a></span>
-                    </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">2015.05.03</b></span>
-                        <span class="list-wid18"><b class="repair_label">银行转账</b></span>
-                        <span class="list-wid21"><b class="repair_label red">30</b></span>
-                        <span class="list-wid18"><b class="repair_label">存入</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="delete()">删除记录</a></span>
-                    </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">2015.05.03</b></span>
-                        <span class="list-wid18"><b class="repair_label">银行转账</b></span>
-                        <span class="list-wid21"><b class="repair_label red">30</b></span>
-                        <span class="list-wid18"><b class="repair_label">存入</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="delete()">删除记录</a></span>
-                    </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">2015.05.03</b></span>
-                        <span class="list-wid18"><b class="repair_label">银行转账</b></span>
-                        <span class="list-wid21"><b class="repair_label red">30</b></span>
-                        <span class="list-wid18"><b class="repair_label">存入</b></span>
+                        <% }else{ %>
+                        <span class="list-wid18"><b class="repair_label">取出</b></span>
+                        <% } %>
                         <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="delete()">删除记录</a></span>
                     </div>
                 </div>
+                <% }) %>
+                <% } %>
             </div>
             <div class="pager" id="page"><ul class="pagination" style="float:right;"><li class="disabled"><a href="javascript:void(0);">每页显示10条/共9页</a></li><li><a href="javascript:void(0);" onclick="javascript:void(0)">&lt;&lt;首页</a></li><li><a href="javascript:void(0);" onclick="javascript:void(0)">上一页</a></li><li class="active"><a href="javascript:void(0);" onclick="javascript:void(0)">1</a></li><li class=""><a href="javascript:void(0);" onclick="goPage(1)">2</a></li><li><a href="javascript:void(0);">...</a></li><li><a href="javascript:void(0);" onclick="goPage(8)">9</a></li><li><a href="javascript:void(0);" onclick="goPage(1)">下一页</a></li><li><a href="javascript:void(0);" onclick="goPage(8)">尾页&gt;&gt;</a></li><li class="gopage"><input type="text" id="toCurPage" value="1"><a href="javascript:void(0);" onclick="goToCur(9);">go</a></li></ul></div>
 
