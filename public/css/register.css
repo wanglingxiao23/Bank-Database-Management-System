@@ -13,7 +13,7 @@ body{
 /*=======================正文样式=======================*/
 .reg{
     width: 1000px;
-    height: 800px;
+    height: 840px;
     background: #f1f1f2;
     margin: auto;
     margin-top: 80px;
@@ -22,7 +22,7 @@ body{
     box-shadow: 0 1px 1px rgba(0,0,0,.05)
 }
 .cbody{
-    height: 665px;
+    height: 705px;
 }
 .input_position{
     width: 400px;

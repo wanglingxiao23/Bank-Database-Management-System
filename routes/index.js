@@ -5,7 +5,7 @@ var conn = require('db');
 /* GET home page. */
 
 router.get('/',function(req,res){
-        res.render('login');
+        res.render('add_admin');
 });
 
 /* GET login page. */
@@ -28,7 +28,6 @@ router.post('/login/admin',function(req,res,next) {
             } else {
                 var adminid = results[0].adminid;
                 req.session.adminid = adminid;
-                console.log(session);
                 res.send(200,{data:0});
             }
         });
@@ -104,7 +103,7 @@ router.get('/adminindex',function(req,res){
             res.redirect('/404');
         }else{
             admin.name = results[0].admin_name;
-            conn.query('select * from property where userid="'+userid+'"',function(error,results){
+            conn.query('select * from property where adminid="'+adminid+'"',function(error,results){
                 if(error){
                     console.log(error.message);
                     res.redirect('/404');
@@ -142,9 +141,39 @@ router.get('/reg', function(req, res, next) {
 });
 
 router.post('/reg', function(req, res, next) {
-    var userName = req.body.username;
-    var adminTel = req.body.adminTel;
-    var adminPsd = req.body.adminPsd;
+    var username  = req.body.username;
+    var creditnum = req.body.creditnum;
+    var userpsd   = req.body.adminPsd;
+    var user_name = req.body.user_name;
+    var ID_no     = req.body.ID_no;
+    var user_tel  = req.body.user_tel;
+    var sex       = req.body.sex;
+    var addr      = req.body.addr;
+    var paypsd    = req.body.paypsd;
+    conn.query('insert into user values("'+ username+'","'+userpsd+'",0,"'+creditnum+'")',function(error,results){
+        if(error){
+            console.log(error.message);
+            res.redirect('/404');
+        }else{
+            conn.query('select * from user where username="'+username+'"',function(error,results){
+                if(error){
+                    console.log(error.message);
+                    res.redirect('/404');
+                }else{
+                    var userid = results[0].userid;
+                    conn.query('insert into user_info values("'+ userid+'","'+user_name+'","'+user_tel+'","'+ID_no+'","'+sex+'","'+addr+'","'+paypsd+'")',function(error,results){
+                        if(error){
+                            console.log(error.message);
+                            res.redirect('/404');
+                        }else{
+                            req.session.userid = userid;
+                            res.redirect('/userindex');
+                        }
+                    });
+                }
+            });
+        }
+    });
     console.log(adminPsd);
 });
 
@@ -168,6 +197,14 @@ router.post('/add', function(req, res, next) {
     var adminName = req.body.adminName;
     var adminTel = req.body.adminTel;
     var adminPsd = req.body.adminPsd;
+    conn.query('insert into admin_info values("'+ adminName+'","'+adminTel+'","'+adminPsd+'")',function(error,results){
+        if(error){
+            console.log(error.message);
+            res.redirect('/404');
+        }else{
+            res.redirect('/login');
+        }
+    });
     console.log(adminPsd);
 });
 
