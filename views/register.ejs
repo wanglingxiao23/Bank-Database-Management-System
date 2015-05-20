@@ -23,53 +23,70 @@
         <div class="panel-body cbody">
             <h4 class="breadcrumb">随机产生的账号为：<b>6222 0236 0208 <%= cardNum %></b></h4>
 
-            <form id="register" action="/reg" method="post">
+            <form>
                 <legend>账户信息</legend>
                 <input type="hidden" value="622202360208<%= cardNum%>" name="creditnum"/>
-                <div class="input-group input_position">
-                    <span class="input-group-addon">用户名：</span>
-                    <input type="text" class="form-control recheckNull" name="username" id="username">
+                <div class="">
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">用户名：</span>
+                        <input type="text" class="form-control" name="userName" id="userName">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label user-warning" for="inputWarning">该用户名已被注册！</label>
+                    <label class="control-label user-error" for="inputError">请输入用户名！</label>
                 </div>
-                <div class="input-group input_position">
-                    <span class="input-group-addon">登陆密码：</span>
-                    <input type="text" class="form-control" name="userpsd">
+                <div>
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">登陆密码：</span>
+                        <input type="password" class="form-control recheckNull" name="userPsd" id="password">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label psd-null" for="inputError">请输入密码！</label>
                 </div>
-                <div class="input-group input_position">
-                    <span class="input-group-addon">再次输入：</span>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="input-group input_position">
-                    <span class="input-group-addon">支付密码：</span>
-                    <input type="text" class="form-control" name="paypsd">
-                </div>
-                <div class="input-group input_position">
-                    <span class="input-group-addon">再次输入：</span>
-                    <input type="text" class="form-control">
+                <div class>
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">再次输入：</span>
+                        <input type="password" class="form-control" id="rePassword">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label psd-error" for="inputError">两次密码输入不一致！</label>
                 </div>
                 <legend>个人信息</legend>
-                <div class="input-group input_position">
-                    <span class="input-group-addon">姓名：</span>
-                    <input type="text" class="form-control" name="user_name">
+                <div>
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">姓名：</span>
+                        <input type="text" class="form-control recheckNull" name="userRelName" id="userRelName">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label name-null" for="inputError">请输入姓名！</label>
                 </div>
                 <div class="input-group input_position">
                     <span class="input-group-addon">性别：</span>
-                    <span class="input-group-addon"><input type="radio" name="sex" value="0" class="" checked>男</span>
-                    <span class="input-group-addon"><input type="radio" name="sex" value="1" class="">女</span>
+                    <span class="input-group-addon"><input type="radio" name="sex" value="male" class="" checked>男</span>
+                    <span class="input-group-addon"><input type="radio" name="sex" value="female" class="">女</span>
                 </div>
-                <div class="input-group input_position">
-                    <span class="input-group-addon">身份证号：</span>
-                    <input type="text" class="form-control" name="ID_no">
+                <div>
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">身份证号：</span>
+                        <input type="text" class="form-control" name="ID_no" id="ID_no">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label name-null" for="inputError">请输入正确的身份证号！</label>
+                </div>
+                <div class="">
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">手机号码：</span>
+                        <input type="text" class="form-control" name="userTel" id="userTel">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label tel-error" for="inputError">请输入正确的11位手机号码！</label>
                 </div>
                 <div class="input-group input_position">
                     <span class="input-group-addon">家庭住址：</span>
-                    <input type="text" class="form-control" name="addr">
-                </div>
-                <div class="input-group input_position">
-                    <span class="input-group-addon">手机号码：</span>
-                    <input type="text" class="form-control" name="user_tel">
+                    <input type="text" class="form-control" name="userAddr" id="userAddr">
                 </div>
                 <div class="ButtonPa1 tc">
-                    <button type="submit" class="mr30 btn btn-default btn-lg" id="addadmin" disabled>添加</button>
+                    <button type="submit" class="mr30 btn btn-default btn-lg" id="register" disabled>添加</button>
                     <button type="button" class="btn btn-default btn-lg">取消</button>
                 </div>
             </form>

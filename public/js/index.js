@@ -409,6 +409,9 @@ function userlogin(){
             } else if (rel.data == 1) {
                 alert("用户名和密码不符！");
                 window.location.href = '/login';
+            } else if (rel.data == 2) {
+                alert("该用户未审核！");
+                window.location.href = '/login';
             } else {
                 alert("输入错误！");
                 window.location.href = '/login';

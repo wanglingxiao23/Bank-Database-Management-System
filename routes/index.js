@@ -44,9 +44,15 @@ router.post('/login/user',function(req,res,next) {
         } else if (results == '' || results == null) {
             res.send(200,{data:1});
         } else {
-            var userid = results[0].userid;
-            req.session.userid = userid;
-            res.send(200,{data:0});
+            var limit = results[0].limit;
+            if(limit == 0){
+                res.send(200,{data:2});
+            }else{
+                var userid = results[0].userid;
+                req.session.userid = userid;
+                res.send(200,{data:0});
+            }
+
         }
     });
 });
@@ -150,7 +156,7 @@ router.post('/reg', function(req, res, next) {
     var sex       = req.body.sex;
     var addr      = req.body.addr;
     var paypsd    = req.body.paypsd;
-    conn.query('insert into user values("'+ username+'","'+userpsd+'",0,"'+creditnum+'")',function(error,results){
+    conn.query('insert into user (username,userpsd,limit,creditnum) values("'+ username+'","'+userpsd+'",0,"'+creditnum+'")',function(error,results){
         if(error){
             console.log(error.message);
             res.redirect('/404');
@@ -166,8 +172,15 @@ router.post('/reg', function(req, res, next) {
                             console.log(error.message);
                             res.redirect('/404');
                         }else{
-                            req.session.userid = userid;
-                            res.redirect('/userindex');
+                            conn.query('insert into history values("'+ userid+'","'+0+'")',function(error,results){
+                                if(error){
+                                    console.log(error.message);
+                                    res.redirect('/404');
+                                }else{
+                                    req.session.userid = userid;
+                                    res.redirect('/userindex');
+                                }
+                            });
                         }
                     });
                 }
@@ -179,12 +192,19 @@ router.post('/reg', function(req, res, next) {
 
 router.post('/reg/check', function(req, res, next){
     var user = req.body;
-    //var adminT = JSON.parse(admin);
     var userName = admin.userName;
     console.log(userName);
-    console.log(req.body);
-    //res.writeHead(200, 'ok');
-    res.send(200,{data:0});
+    conn.query('select * from user where username="'+userName+'"', function (error, results) {
+        console.log(results);
+        if (error) {
+            console.log(error.message);
+            res.redirect('/404');
+        } else if (results == '' || results == null) {
+            res.send(200,{data:1});
+        } else {
+            res.send(200,{data:0});
+        }
+    });
 });
 
 
@@ -197,7 +217,7 @@ router.post('/add', function(req, res, next) {
     var adminName = req.body.adminName;
     var adminTel = req.body.adminTel;
     var adminPsd = req.body.adminPsd;
-    conn.query('insert into admin_info values("'+ adminName+'","'+adminTel+'","'+adminPsd+'")',function(error,results){
+    conn.query('insert into admin_info (admin_name,admin_tel,admin_psd) values("'+ adminName+'","'+adminTel+'","'+adminPsd+'")',function(error,results){
         if(error){
             console.log(error.message);
             res.redirect('/404');
@@ -210,12 +230,19 @@ router.post('/add', function(req, res, next) {
 
 router.post('/add/check', function(req, res, next){
     var admin = req.body;
-    //var adminT = JSON.parse(admin);
     var adminTel = admin.adminTel;
     console.log(adminTel);
-    console.log(req.body);
-    //res.writeHead(200, 'ok');
-    res.send(200,{data:0});
+    conn.query('select * from admin_info where admin_tel="'+adminTel+'"', function (error, results) {
+        console.log(results);
+        if (error) {
+            console.log(error.message);
+            res.redirect('/404');
+        } else if (results == '' || results == null) {
+            res.send(200,{data:1});
+        } else {
+            res.send(200,{data:0});
+        }
+    });
 });
 
 
