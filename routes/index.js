@@ -101,37 +101,50 @@ router.get('/adminindex',checkUserLogin);
 router.get('/adminindex',function(req,res){
     var adminid = req.session.adminid;
     var admin = {};
+    admin.prenum == 0;
+    admin.afternum == 0;
     var accounts = [];
     var account = {};
-    conn.query('select admin_name from admin_info where adminid="'+adminid+'"',function(error,results){
-        if(error){
+    conn.query('select * from admin_info where adminid="'+ adminid +'"',function(error,results) {
+        if (error) {
             console.log(error.message);
             res.redirect('/404');
-        }else{
+        } else {
             admin.name = results[0].admin_name;
-            conn.query('select * from property where adminid="'+adminid+'"',function(error,results){
-                if(error){
+            conn.query('select * from user', function (error, results) {
+                if (error) {
                     console.log(error.message);
                     res.redirect('/404');
-                }else{
-                    user.property = results[0].sum;
-                    conn.query('select * from history where userid="'+userid+'"',function(error,results){
-                        if(error){
-                            console.log(error.message);
-                            res.redirect('/404');
-                        }else{
-                            console.log(results);
-                            for(var i=0;i<results.length;i++){
-                                note.date = results[i].date;
-                                note.status = results[i].status;
-                                note.amount = results[i].amount;
-                                notes.push(note);
-                            }
-                            console.log(user);
-                            console.log(notes);
-                            res.render('userIndex',{user:user,notes:notes});
+                } else {
+                    admin.allcredit = results.length;
+                    for (var i = 0; i < results.length; i++) {
+                        account.id = results[i].userid;
+                        account.username = results[i].username;
+                        account.creditnum = results[i].creditnum;
+                        account.limit = results[i].limit;
+                        var time = results[i].time;
+                        account.time = getTime(time);
+                        account.hour = getHour(time);
+                        if(account.limit == 0){
+                            account.prenum++;
+                        }else if(account.limit == 1){
+                            account.afternum++;
                         }
-                    });
+                        conn.query('select * from user_info where userid="' + account.id + '"', function (error, results) {
+                            if (error) {
+                                console.log(error.message);
+                                res.redirect('/404');
+                            } else {
+                                account.name = results[0].user_name;
+                                account.tel = results[0].user_tel;
+                                account.ID_no = results[0].ID_no;
+                                account.sex = results[0].sex;
+                                account.addr = results[0].addr;
+                            }
+                        });
+                        accounts.push(account);
+                    }
+                    res.render('adminIndex', {admin: admin, accounts: accounts});
                 }
             });
         }
@@ -156,7 +169,8 @@ router.post('/reg', function(req, res, next) {
     var sex       = req.body.sex;
     var addr      = req.body.addr;
     var paypsd    = req.body.paypsd;
-    conn.query('insert into user (username,userpsd,limit,creditnum) values("'+ username+'","'+userpsd+'",0,"'+creditnum+'")',function(error,results){
+    var time      = Date.now();
+    conn.query('insert into user (username,userpsd,limit,creditnum,time) values("'+ username+'","'+userpsd+'",0,"'+creditnum+'","'+time+'")',function(error,results){
         if(error){
             console.log(error.message);
             res.redirect('/404');
@@ -264,6 +278,22 @@ function checkAdminLogin(req, res) {
         res.redirect('/login');
     }
     next();
+}
+function getTime(date){
+    var time = "";
+    var year = date.getFullYear().toString();
+    var month = date.getMonth().toString();
+    var day  = date.getDate().toString();
+    time = year+"-"+month+"-"+day;
+    return time;
+}
+function getHour(date){
+    var time = "";
+    var hour = date.getHours().toString();
+    var minite = date.getMinutes().toString();
+    var second  = date.getSeconds().toString();
+    time = hour+":"+minite+":"+second;
+    return time;
 }
 
 module.exports = router;

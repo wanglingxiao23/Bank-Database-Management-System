@@ -191,16 +191,27 @@ function idCardCheck(){
 }
 //===========================================end==================================================//
 function usercheck(){
+    var creditnum = $(this).parent().siblings().filter(".creditnum").val();
+    var username = $(this).parent().siblings().filter(".username").val();
+    var name = $(this).parent().siblings().filter(".name").val();
+    var tel = $(this).parent().siblings().filter(".tel").val();
+    var time = $(this).parent().siblings().filter(".time").val();
+    var hour = $(this).parent().siblings().filter(".hour").val();
+    var ID_no = $(this).parent().siblings().filter(".ID_no").val();
+    var sex = $(this).parent().siblings().filter(".sex").val();
+    var addr = $(this).parent().siblings().filter(".addr").val();
+    var userid = $(this).parent().siblings().filter(".id").val();
     var html ='';
     html += '<div class="main-cont">';
     html += '  <div class=" mt10 bg_write w660">';
     html += '    <h3 class="red">用户信息</h3>';
-    html += '    <div><ul class=" clearfix"><li>银行账号：<em>62220236020822222222</em></li></ul>';
-    html += '         <ul class=" clearfix"><li>申请时间：<em>2015-04-30 17:01:19</em></li></ul>';
-    html += '         <ul class=" clearfix"><li>姓名：<em>王尼玛</em></li><li>性别：<em>男</em></li></ul>';
-    html += '         <ul class=" clearfix"><li>联系电话：<em>18888888888</em></li><li>身份证号码：<em>372928199999999999</em></li></ul>';
+    html += '    <div><ul class=" clearfix"><li>银行账号：<em>'+creditnum+'</em></li></ul>';
+    html += '         <ul class=" clearfix"><li>用户名：<em>'+username+'</em></li></ul>';
+    html += '         <ul class=" clearfix"><li>申请时间：<em>'+time+' '+hour+'</em></li></ul>';
+    html += '         <ul class=" clearfix"><li>姓名：<em>'+name+'</em></li><li>性别：<em>'+sex+'</em></li></ul>';
+    html += '         <ul class=" clearfix"><li>联系电话：<em>'+tel+'</em></li><li>身份证号码：<em>'+ID_no+'</em></li></ul>';
     html += '         <div class="dash_underline"></div>';
-    html += '         <ul class=" clearfix"><li>地址：<em style="word-break:break-all;">广州市白云区</em></li></ul></div>';
+    html += '         <ul class=" clearfix"><li>地址：<em style="word-break:break-all;">'+addr+'</em></li></ul></div>';
     html += '</div></div>';
 	art.dialog({
         title : '用户审核',
@@ -317,6 +328,7 @@ function withdraw(){
     })
 }
 function recharge(){
+
     var html ='';
     html += '<div>';
     html += '  <div class="">';

@@ -56,6 +56,12 @@
                     </div>
                 </div>
                 <% }) %>
+                <% }else{ %>
+                <div class="ora_list cf">
+                    <div class="list_con">
+                        <span><b class="repair_label">没有收支记录~</b></span>
+                    </div>
+                </div>
                 <% } %>
             </div>
             <div class="pager" id="page"><ul class="pagination" style="float:right;"><li class="disabled"><a href="javascript:void(0);">每页显示10条/共9页</a></li><li><a href="javascript:void(0);" onclick="javascript:void(0)">&lt;&lt;首页</a></li><li><a href="javascript:void(0);" onclick="javascript:void(0)">上一页</a></li><li class="active"><a href="javascript:void(0);" onclick="javascript:void(0)">1</a></li><li class=""><a href="javascript:void(0);" onclick="goPage(1)">2</a></li><li><a href="javascript:void(0);">...</a></li><li><a href="javascript:void(0);" onclick="goPage(8)">9</a></li><li><a href="javascript:void(0);" onclick="goPage(1)">下一页</a></li><li><a href="javascript:void(0);" onclick="goPage(8)">尾页&gt;&gt;</a></li><li class="gopage"><input type="text" id="toCurPage" value="1"><a href="javascript:void(0);" onclick="goToCur(9);">go</a></li></ul></div>

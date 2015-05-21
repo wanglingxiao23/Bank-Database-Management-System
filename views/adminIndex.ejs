@@ -16,14 +16,14 @@
 <body>
 <div class="main-cont">
     <ul class="tab_change cf ">
-        <li class="welcome"><label>王尼玛</label>,您好</li>
+        <li class="welcome"><label><%= admin.name %></label>,您好</li>
         <a href="/add" class="btn btn-info">添加新管理员</a>
     </ul>
     <form name="supplyForm" method="post" action="" id="supplyForm">
         <div class="select-wrap  mt20">
-            <span>当前的全部用户有<a href="javascript:;" class="red">1000</a>位</span>
-            <span>未审核用户有<a href="javascript:;" class="red">100</a>位</span>
-            <span>已审核用户有<a href="javascript:;" class="red">10</a>位</span>
+            <span>当前的全部用户有<a href="javascript:;" class="red"><%= admim.allcredit %></a>位</span>
+            <span>未审核用户有<a href="javascript:;" class="red"><%= admin.prenum %></a>位</span>
+            <span>已审核用户有<a href="javascript:;" class="red"><%= admin.afternum %></a>位</span>
         </div>
 
         <div class="tc"><div class="to_drop"></div></div>
@@ -31,7 +31,7 @@
         <div class="ora_div">
             <!-- <div class="cf"><span class="remind orange_text">有两个商品提醒上架</span></div> -->
             <ul class="title_ul cf">
-                <li class="list-wid25"></li>
+                <li class="list-wid25">银行账号</li>
                 <li class="list-wid18">登陆账号</li>
                 <li class="list-wid21">申请用户的信息</li>
                 <li class="list-wid18">申请时间</li>
@@ -40,67 +40,37 @@
             <div class="ora_con cf">
                 <!-- ora_list -->
                 <div class="ora_list cf">
+                    <% if(accounts.length) { %>
+                    <% accounts.forEach(function(account) { %>
                     <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">622202360222222222222</b></span>
-                        <span class="list-wid18"><b class="repair_label">lcjinzhong@163.com</b></span>
-                        <span class="list-wid21 mt10"><b class="repair_label">王敏</b><b class="repair-tel">13826402222</b></span>
-                        <span class="list-wid18 mt10"><b class="repair_label">2012-02-20</b><b class="repair-time">9:12:12</b></span>
-                        <input type="hidden" id="ID_no" value="372928199306666666">
-                        <input type="hidden" id="sex" value="男">
-                        <input type="hidden" id="addr" value="广州市白云区">
-                        <input type="hidden" id="id" value="id">
+                        <span class="list-wid25"><b class="repair_label"><%=account.creditnum %></b></span>
+                        <span class="list-wid18"><b class="repair_label"><%=account.username %></b></span>
+                        <span class="list-wid21 mt10"><b class="repair_label"><%=account.name %></b><b class="repair-tel"><%=account.tel %></b></span>
+                        <span class="list-wid18 mt10"><b class="repair_label"><%=account.time %></b><b class="repair-time"><%=account.hour%></b></span>
+                        <input type="hidden" class="ID_no" value="<%=account.ID_no %>">
+                        <% if(account.sex == 0){ %>
+                            <input type="hidden" class="sex" value="男">
+                        <% }else if(account.sex == 1){ %>
+                            <input type="hidden" class="sex" value="女">
+                        <% } %>
+                        <input type="hidden" class="addr" value="<%=account.addr %>">
+                        <input type="hidden" class="id" value="<%=account.id%>">
+                        <input type="hidden" class="creditnum" value="<%=account.creditnum%>">
+                        <input type="hidden" class="username" value="<%=account.username%>">
+                        <input type="hidden" class="name" value="<%=account.name%>">
+                        <input type="hidden" class="tel" value="<%=account.tel%>">
+                        <input type="hidden" class="time" value="<%=account.time%>">
+                        <input type="hidden" class="hour" value="<%=account.hour%>">
                         <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="usercheck()">审核</a></span>
                     </div>
-
-                </div>
-                <div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">622202360222222222222</b></span>
-                        <span class="list-wid18"><b class="repair_label">lcjinzhong@163.com</b></span>
-                        <span class="list-wid21 mt10"><b class="repair_label">王敏</b><b class="repair-tel">13826402222</b></span>
-                        <span class="list-wid18 mt10"><b class="repair_label">2012-02-20</b><b class="repair-time">9:12:12</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="userlook()">查看</a></span>
+                    <% }) %>
+                    <% }else{ %>
+                    <div class="ora_list cf">
+                        <div class="list_con">
+                            <span><b class="repair_label">没有账户信息~</b></span>
+                        </div>
                     </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">622202360222222222222</b></span>
-                        <span class="list-wid18"><b class="repair_label">lcjinzhong@163.com</b></span>
-                        <span class="list-wid21 mt10"><b class="repair_label">王敏</b><b class="repair-tel">13826402222</b></span>
-                        <span class="list-wid18 mt10"><b class="repair_label">2012-02-20</b><b class="repair-time">9:12:12</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="usercheck()">审核</a></span>
-                    </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">622202360222222222222</b></span>
-                        <span class="list-wid18"><b class="repair_label">lcjinzhong@163.com</b></span>
-                        <span class="list-wid21 mt10"><b class="repair_label">王敏</b><b class="repair-tel">13826402222</b></span>
-                        <span class="list-wid18 mt10"><b class="repair_label">2012-02-20</b><b class="repair-time">9:12:12</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="usercheck()">审核</a></span>
-                    </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">622202360222222222222</b></span>
-                        <span class="list-wid18"><b class="repair_label">lcjinzhong@163.com</b></span>
-                        <span class="list-wid21 mt10"><b class="repair_label">王敏</b><b class="repair-tel">13826402222</b></span>
-                        <span class="list-wid18 mt10"><b class="repair_label">2012-02-20</b><b class="repair-time">9:12:12</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="usercheck()">审核</a></span>
-                    </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">622202360222222222222</b></span>
-                        <span class="list-wid18"><b class="repair_label">lcjinzhong@163.com</b></span>
-                        <span class="list-wid21 mt10"><b class="repair_label">王敏</b><b class="repair-tel">13826402222</b></span>
-                        <span class="list-wid18 mt10"><b class="repair_label">2012-02-20</b><b class="repair-time">9:12:12</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="usercheck()">审核</a></span>
-                    </div>
-                </div><div class="ora_list cf">
-                    <div class="list_con">
-                        <span class="list-wid25"><b class="repair_label">622202360222222222222</b></span>
-                        <span class="list-wid18"><b class="repair_label">lcjinzhong@163.com</b></span>
-                        <span class="list-wid21 mt10"><b class="repair_label">王敏</b><b class="repair-tel">13826402222</b></span>
-                        <span class="list-wid18 mt10"><b class="repair_label">2012-02-20</b><b class="repair-time">9:12:12</b></span>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="usercheck()">审核</a></span>
-                    </div>
+                    <% } %>
                 </div>
             </div>
             <div class="pager" id="page"><ul class="pagination" style="float:right;"><li class="disabled"><a href="javascript:void(0);">每页显示10条/共9页</a></li><li><a href="javascript:void(0);" onclick="javascript:void(0)">&lt;&lt;首页</a></li><li><a href="javascript:void(0);" onclick="javascript:void(0)">上一页</a></li><li class="active"><a href="javascript:void(0);" onclick="javascript:void(0)">1</a></li><li class=""><a href="javascript:void(0);" onclick="goPage(1)">2</a></li><li><a href="javascript:void(0);">...</a></li><li><a href="javascript:void(0);" onclick="goPage(8)">9</a></li><li><a href="javascript:void(0);" onclick="goPage(1)">下一页</a></li><li><a href="javascript:void(0);" onclick="goPage(8)">尾页&gt;&gt;</a></li><li class="gopage"><input type="text" id="toCurPage" value="1"><a href="javascript:void(0);" onclick="goToCur(9);">go</a></li></ul></div>
