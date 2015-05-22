@@ -222,24 +222,75 @@ function usercheck(){
         button:[{
             name : "审核通过",
             callback : function(){
-                artDialog.alert("审核通过");
+                var data = {"userid":userid,'state':0};
+                var jsondata = JSON.stringify(data);
+                $.ajax({
+                    url : '/adminindex',
+                    type : 'post',
+                    data : jsondata,
+                    contentType : 'application/json',
+                    success : function(rel){
+                        if(rel.data == 0) {
+                            alert('审核通过！');
+                            window.location.href = '/adminindex';
+                        }
+                    },
+                    error : function(rel){
+                        alert('操作失败！');
+                        window.location.href = '/adminindex';
+                    }
+                });
             }
         },{
             name : "审核不通过",
             callback : function(){
-                alert("审核不通过");
+                var data = {"userid":userid,'state':1};
+                var jsondata = JSON.stringify(data);
+                $.ajax({
+                    url : '/adminindex',
+                    type : 'post',
+                    data : jsondata,
+                    contentType : 'application/json',
+                    success : function(rel){
+                        if(rel.data == 0) {
+                            alert('审核不通过！');
+                            window.location.href = '/adminindex';
+                        }
+                    },
+                    error : function(rel){
+                        alert('操作失败！');
+                        window.location.href = '/adminindex';
+                    }
+                });
             }
         },{
             name : "删除该用户",
             callback : function(){
                 if(confirm("确定要删除吗？")){
-                    alert("删除成功");
+                    var data = {"userid":userid,'state':2};
+                    var jsondata = JSON.stringify(data);
+                    $.ajax({
+                        url : '/adminindex',
+                        type : 'post',
+                        data : jsondata,
+                        contentType : 'application/json',
+                        success : function(rel){
+                            if(rel.data == 0) {
+                                alert('删除成功！');
+                                window.location.href = '/adminindex';
+                            }
+                        },
+                        error : function(rel){
+                            alert('操作失败！');
+                            window.location.href = '/adminindex';
+                        }
+                    });
                 }
             }
         },{
             name : "返回",
             callback : function(){
-                alert("返回");
+                return true;
             }
         }]
     })
@@ -266,13 +317,30 @@ function userlook(){
             name : "删除该用户",
             callback : function(){
                 if(confirm("确定要删除吗？")){
-                    alert("删除成功");
+                    var data = {"userid":userid,'state':2};
+                    var jsondata = JSON.stringify(data);
+                    $.ajax({
+                        url : '/adminindex',
+                        type : 'post',
+                        data : jsondata,
+                        contentType : 'application/json',
+                        success : function(rel){
+                            if(rel.data == 0) {
+                                alert('删除成功！');
+                                window.location.href = '/adminindex';
+                            }
+                        },
+                        error : function(rel){
+                            alert('操作失败！');
+                            window.location.href = '/adminindex';
+                        }
+                    });
                 }
             }
         },{
             name : "返回",
             callback : function(){
-                alert("返回");
+                return true;
             }
         }]
     })
@@ -314,7 +382,29 @@ function withdraw(){
                 var amountStatus = $("#withdrawAmount").parent().parent().hasClass("has-feedback");
                 var psdStatus = $("#payPassword").parent().parent().hasClass("has-feedback");
                 if(amountStatus && psdStatus){
-                    return true;
+                    var amount = $("#withdrawAmount").val();
+                    var paypsd = $("#payPassword").val();
+                    var data = {'amount':amount,'paypsd':paypsd};
+                    var jsondata = JSON.stringify(data);
+                    $.ajax({
+                        url : '/user/withdraw',
+                        type : 'post',
+                        data : jsondata,
+                        contentType : 'application/json',
+                        success : function(rel){
+                            if(rel.data == 0){
+                                alert('取款成功！当前余额为：'+rel.sum);
+                            }else if(rel.data == 1){
+                                alert('支付密码输入不正确！');
+                            }else{
+                                alert('取款失败！');
+                            }
+                        },
+                        error : function(){
+                            alert("服务器请求错误！");
+                            document.location.href='/add';
+                        }
+                    });
                 }else{
                     return false;
                 }
@@ -423,6 +513,9 @@ function userlogin(){
                 window.location.href = '/login';
             } else if (rel.data == 2) {
                 alert("该用户未审核！");
+                window.location.href = '/login';
+            } else if (rel.data == 3) {
+                alert("该用户未通过审核！");
                 window.location.href = '/login';
             } else {
                 alert("输入错误！");

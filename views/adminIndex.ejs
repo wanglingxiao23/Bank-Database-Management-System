@@ -21,9 +21,9 @@
     </ul>
     <form name="supplyForm" method="post" action="" id="supplyForm">
         <div class="select-wrap  mt20">
-            <span>当前的全部用户有<a href="javascript:;" class="red"><%= admim.allcredit %></a>位</span>
-            <span>未审核用户有<a href="javascript:;" class="red"><%= admin.prenum %></a>位</span>
-            <span>已审核用户有<a href="javascript:;" class="red"><%= admin.afternum %></a>位</span>
+            <span>当前的全部用户有<a href="/adminindex/0" class="red"><%= admim.allcredit %></a>位</span>
+            <span>未审核用户有<a href="/adminindex/1" class="red"><%= admin.prenum %></a>位</span>
+            <span>已审核用户有<a href="/adminindex/2" class="red"><%= admin.afternum %></a>位</span>
         </div>
 
         <div class="tc"><div class="to_drop"></div></div>
@@ -61,7 +61,12 @@
                         <input type="hidden" class="tel" value="<%=account.tel%>">
                         <input type="hidden" class="time" value="<%=account.time%>">
                         <input type="hidden" class="hour" value="<%=account.hour%>">
+                        <% if(account.limit == 0){ %>
                         <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="usercheck()">审核</a></span>
+                        <% }else if(account.limit == 1){%>
+                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="userlook()">查看</a></span>
+                        <% } %>
+
                     </div>
                     <% }) %>
                     <% }else{ %>

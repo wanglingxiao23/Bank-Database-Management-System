@@ -47,16 +47,17 @@ router.post('/login/user',function(req,res,next) {
             var limit = results[0].limit;
             if(limit == 0){
                 res.send(200,{data:2});
-            }else{
+            }else if(limit == 1){
                 var userid = results[0].userid;
                 req.session.userid = userid;
                 res.send(200,{data:0});
+            }else if(limit == 2){
+                res.send(200,{data:3});
             }
-
         }
     });
 });
-/* GET index page. */
+/* GET userindex page. */
 router.get('/userindex',checkUserLogin);
 router.get('/userindex',function(req,res){
     var userid = req.session.userid;
@@ -97,13 +98,26 @@ router.get('/userindex',function(req,res){
         }
     });
 });
-router.get('/adminindex',checkUserLogin);
+//用户取款操作
+router.post('/user/withdraw',function(req,res){
+    
+});
+/* GET adminindex page. */
+//管理员主页
+router.get('/adminindex',checkAdminLogin);
 router.get('/adminindex',function(req,res){
+    res.redirect('/adminindex/0');
+});
+router.get('/adminindex/:status',checkUserLogin);
+router.get('/adminindex/:status',function(req,res){
+    var status = req.body.status;
     var adminid = req.session.adminid;
     var admin = {};
     admin.prenum == 0;
     admin.afternum == 0;
     var accounts = [];
+    var preaccounts = [];
+    var afteraccounts = [];
     var account = {};
     conn.query('select * from admin_info where adminid="'+ adminid +'"',function(error,results) {
         if (error) {
@@ -142,15 +156,58 @@ router.get('/adminindex',function(req,res){
                                 account.addr = results[0].addr;
                             }
                         });
+                        if(account.limit == 0){
+                            preaccounts.push(account);
+                        }else if(account.limit == 1){
+                            afteraccounts.push(account);
+                        }
                         accounts.push(account);
                     }
-                    res.render('adminIndex', {admin: admin, accounts: accounts});
+                    if(status == 0){
+                        res.render('adminIndex', {admin: admin, accounts: accounts});
+                    }else if(status == 1){
+                        res.render('adminIndex', {admin: admin, accounts: preaccounts});
+                    }else if(status == 2){
+                        res.render('adminIndex', {admin: admin, accounts: afteraccounts});
+                    }
                 }
             });
         }
     });
 });
-
+//管理员审核操作
+router.post('/adminindex/',function(req,res){
+    var userid = req.body.userid;
+    var state  = req.body.state;
+    if(state == 0){
+        conn.query('update user set limit=1 where userid="'+userid+'"',function(error,results){
+            if(error){
+                console.log(error.message);
+                res.redirect('/404');
+            }else {
+                res.send(200,{data:0});
+            }
+        });
+    }else if(state == 1){
+        conn.query('update user set limit=2 where userid="'+userid+'"',function(error,results){
+            if(error){
+                console.log(error.message);
+                res.redirect('/404');
+            }else {
+                res.send(200,{data:0});
+            }
+        });
+    }else if(state == 2){
+        conn.query('delete from user where userid="'+userid+'"',function(error,results){
+            if(error){
+                console.log(error.message);
+                res.redirect('/404');
+            }else {
+                res.send(200,{data:0});
+            }
+        });
+    }
+});
 
 
 /* GET register page. */
