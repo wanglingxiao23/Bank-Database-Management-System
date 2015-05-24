@@ -190,6 +190,7 @@ function idCardCheck(){
     }
 }
 //===========================================end==================================================//
+$(".usercheck").on('click',usercheck);
 function usercheck(){
     var creditnum = $(this).parent().siblings().filter(".creditnum").val();
     var username = $(this).parent().siblings().filter(".username").val();
@@ -204,7 +205,7 @@ function usercheck(){
     var html ='';
     html += '<div class="main-cont">';
     html += '  <div class=" mt10 bg_write w660">';
-    html += '    <h3 class="red">用户信息</h3>';
+    html += '  <h3 class="red">用户信息<b class="status">(未审核)</b></h3>';
     html += '    <div><ul class=" clearfix"><li>银行账号：<em>'+creditnum+'</em></li></ul>';
     html += '         <ul class=" clearfix"><li>用户名：<em>'+username+'</em></li></ul>';
     html += '         <ul class=" clearfix"><li>申请时间：<em>'+time+' '+hour+'</em></li></ul>';
@@ -232,12 +233,12 @@ function usercheck(){
                     success : function(rel){
                         if(rel.data == 0) {
                             alert('审核通过！');
-                            window.location.href = '/adminindex';
+                            window.location.reload();
                         }
                     },
                     error : function(rel){
                         alert('操作失败！');
-                        window.location.href = '/adminindex';
+                        window.location.reload();
                     }
                 });
             }
@@ -254,12 +255,12 @@ function usercheck(){
                     success : function(rel){
                         if(rel.data == 0) {
                             alert('审核不通过！');
-                            window.location.href = '/adminindex';
+                            window.location.reload();
                         }
                     },
                     error : function(rel){
                         alert('操作失败！');
-                        window.location.href = '/adminindex';
+                        window.location.reload();
                     }
                 });
             }
@@ -277,12 +278,12 @@ function usercheck(){
                         success : function(rel){
                             if(rel.data == 0) {
                                 alert('删除成功！');
-                                window.location.href = '/adminindex';
+                                window.location.reload();
                             }
                         },
                         error : function(rel){
                             alert('操作失败！');
-                            window.location.href = '/adminindex';
+                            window.location.reload();
                         }
                     });
                 }
@@ -295,17 +296,37 @@ function usercheck(){
         }]
     })
 }
-function userlook(){
+$(".userlook").on('click',userlook);
+$(".userlookno").on('click',userlook);
+function userlook(content){
+    var limit = $(this).parent().siblings().filter(".limit").val();
+    var content ="";
+    if(limit == 1){
+        content = "已审核通过";
+    }else if(limit == 2){
+        content = "审核未通过";
+    }
+    var creditnum = $(this).parent().siblings().filter(".creditnum").val();
+    var username = $(this).parent().siblings().filter(".username").val();
+    var name = $(this).parent().siblings().filter(".name").val();
+    var tel = $(this).parent().siblings().filter(".tel").val();
+    var time = $(this).parent().siblings().filter(".time").val();
+    var hour = $(this).parent().siblings().filter(".hour").val();
+    var ID_no = $(this).parent().siblings().filter(".ID_no").val();
+    var sex = $(this).parent().siblings().filter(".sex").val();
+    var addr = $(this).parent().siblings().filter(".addr").val();
+    var userid = $(this).parent().siblings().filter(".id").val();
     var html ='';
     html += '<div class="main-cont">';
     html += '  <div class=" mt10 bg_write w660">';
-    html += '  <h3 class="red">用户信息<b class="status">(已审核通过)</b></h3>';
-    html += '  <div><ul class=" clearfix"><li>银行账号：<em>62220236020822222222</em></li></ul>';
-    html += '       <ul class=" clearfix"><li>申请时间：<em>2015-04-30 17:01:19</em></li></ul>';
-    html += '       <ul class=" clearfix"><li>姓名：<em>王尼玛</em></li><li>性别：<em>男</em></li></ul>';
-    html += '       <ul class=" clearfix"><li>联系电话：<em>18888888888</em></li><li>身份证号码：<em>372928199999999999</em></li></ul>';
-    html += '       <div class="dash_underline"></div>';
-    html += '       <ul class=" clearfix"><li>地址：<em style="word-break:break-all;">广州市白云区</em></li></ul></div>';
+    html += '  <h3 class="red">用户信息<b class="status">('+content+')</b></h3>';
+    html += '    <div><ul class=" clearfix"><li>银行账号：<em>'+creditnum+'</em></li></ul>';
+    html += '         <ul class=" clearfix"><li>用户名：<em>'+username+'</em></li></ul>';
+    html += '         <ul class=" clearfix"><li>申请时间：<em>'+time+' '+hour+'</em></li></ul>';
+    html += '         <ul class=" clearfix"><li>姓名：<em>'+name+'</em></li><li>性别：<em>'+sex+'</em></li></ul>';
+    html += '         <ul class=" clearfix"><li>联系电话：<em>'+tel+'</em></li><li>身份证号码：<em>'+ID_no+'</em></li></ul>';
+    html += '         <div class="dash_underline"></div>';
+    html += '         <ul class=" clearfix"><li>地址：<em style="word-break:break-all;">'+addr+'</em></li></ul></div>';
     html += '</div></div>';
     art.dialog({
         title : '查看信息',
@@ -327,12 +348,12 @@ function userlook(){
                         success : function(rel){
                             if(rel.data == 0) {
                                 alert('删除成功！');
-                                window.location.href = '/adminindex';
+                                window.location.reload();
                             }
                         },
                         error : function(rel){
                             alert('操作失败！');
-                            window.location.href = '/adminindex';
+                            window.location.reload();
                         }
                     });
                 }
@@ -346,9 +367,11 @@ function userlook(){
     })
 }
 function withdraw(){
+    var property = $('.property').text();
+    var userid = $('#userid').val();
     var html ='';
     html += '<div class="art-balance">当前的余额:';
-    html += '  <a href="javascript:;" class="red">1000</a>';
+    html += '  <a href="javascript:;" class="red">'+ property +'</a>';
     html += '元</div>';
     html += '<div>';
     html += '  <div class="">';
@@ -365,9 +388,9 @@ function withdraw(){
     html += '  <label class="control-label withdraw" for="inputError">密码错误！</label>';
     html += '</div>';
     html += '<script>';
-    html += '  $("#withdrawAmount").on("blur",function(){check($(this));});';
+    html += '  $("#withdrawAmount").on("blur",function(){checkAmount(property,$(this));});';
     html += '  $("#withdrawAmount").on("focus",function(){hide($(this));});';
-    html += '  $("#payPassword").on("blur",function(){check($(this));});';
+    html += '  $("#payPassword").on("blur",function(){checkPsd(userid,$("#payPassword").val(),$(this));});';
     html += '  $("#payPassword").on("focus",function(){hide($(this));});';
     html += '</script>';
     art.dialog({
@@ -384,7 +407,7 @@ function withdraw(){
                 if(amountStatus && psdStatus){
                     var amount = $("#withdrawAmount").val();
                     var paypsd = $("#payPassword").val();
-                    var data = {'amount':amount,'paypsd':paypsd};
+                    var data = {'amount':amount,'userid':userid};
                     var jsondata = JSON.stringify(data);
                     $.ajax({
                         url : '/user/withdraw',
@@ -394,18 +417,19 @@ function withdraw(){
                         success : function(rel){
                             if(rel.data == 0){
                                 alert('取款成功！当前余额为：'+rel.sum);
-                            }else if(rel.data == 1){
-                                alert('支付密码输入不正确！');
+                                window.location.reload();
                             }else{
                                 alert('取款失败！');
+                                return true;
                             }
                         },
                         error : function(){
                             alert("服务器请求错误！");
-                            document.location.href='/add';
+                            document.location.href='/404';
                         }
                     });
                 }else{
+                    alert('输入错误！');
                     return false;
                 }
             }
@@ -418,7 +442,7 @@ function withdraw(){
     })
 }
 function recharge(){
-
+    var userid = $('#userid').val();
     var html ='';
     html += '<div>';
     html += '  <div class="">';
@@ -442,8 +466,30 @@ function recharge(){
             callback : function(){
                 var status = $("#rechargeAmount").parent().parent().hasClass("has-feedback");
                 if(status){
-                    return true;
+                    var amount = $('#rechargeAmount').val();
+                    var data = {'amount':amount,'userid':userid};
+                    var jsondata = JSON.stringify(data);
+                    $.ajax({
+                        url : '/user/recharge',
+                        type : 'post',
+                        data : jsondata,
+                        contentType : 'application/json',
+                        success : function(rel){
+                            if(rel.data == 0){
+                                alert('存款成功！当前余额为：'+rel.sum);
+                                window.location.reload();
+                            }else{
+                                alert('存款失败！');
+                                return true;
+                            }
+                        },
+                        error : function(){
+                            alert("服务器请求错误！");
+                            document.location.href='/404';
+                        }
+                    });
                 }else{
+                    alert('输入错误！');
                     return false;
                 }
             }
@@ -455,9 +501,34 @@ function recharge(){
         }]
     })
 }
-function checkPayPsd(userId,$this){
+function checkPayPsd(userId,paypsd,$this){
     var value = $this.val();
     if(value == ""||value == null){
+        $this.parent().parent().attr('class','has-error');
+        $this.parent().next().show();
+    }else{
+        var data = {'userid':userId,'paypsd':paypsd};
+        var jsondata = JSON.stringify(data);
+        $.ajax({
+            url : '/user/checkPaypsd',
+            type : 'post',
+            data : jsondata,
+            contentType : 'application/json',
+            success : function(rel){
+                if(rel.data == 0){
+                    $this.parent().parent().attr("class","has-feedback");
+                    $this.next().show();
+                }else if(rel.data == 1) {
+                    $this.parent().parent().attr('class','has-error');
+                    $this.parent().next().show();
+                }
+            }
+        });
+    }
+}
+function checkAmount(property,$this){
+    var value = $this.val();
+    if(value == ""||value == null||value > property){
         $this.parent().parent().attr('class','has-error');
         $this.parent().next().show();
     }else{
@@ -478,7 +549,7 @@ function adminlogin(){
         contentType : 'application/json',
         success : function(rel){
             if(rel.data == 0){
-                window.location.href = '/adminindex';
+                window.location.href = '/adminindex/0';
                 return;
             }else if(rel.data == 1){
                 alert("用户名和密码不符！");
@@ -509,7 +580,7 @@ function userlogin(){
                 window.location.href = '/userindex';
                 return;
             } else if (rel.data == 1) {
-                alert("用户名和密码不符！");
+                alert("用户名不存在或用户名和密码不符！");
                 window.location.href = '/login';
             } else if (rel.data == 2) {
                 alert("该用户未审核！");

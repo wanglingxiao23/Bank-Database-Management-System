@@ -4,7 +4,9 @@ create table user(
 userid int primary key auto_increment,
 username varchar not null,
 password varchar not null,
-limits int(1) not null
+limits int(1) not null,
+creditnum int(20) not null,
+time timestamp default now() not null
 )engine=InnoDB default charset=utf8;
 
 create table user_info(
@@ -23,7 +25,8 @@ sum int not null
 )engine=InnoDB default charset=utf8;
 
 create table history(
-userid int primary key,
+hisid int primary key,
+userid int not null,,
 amount double not null,
 status int not null,
 date timestamp null default now()

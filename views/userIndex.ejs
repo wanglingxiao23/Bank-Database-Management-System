@@ -14,15 +14,15 @@
     <link href="/css/register.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div class="main-cont1">
+<div class="main-cont">
     <ul class="tab_change cf ">
-        <li class="welcome"><label><%= user.name %></label>,您好</li>
-        <span class="setUserInfo"><a href="javascript:;">修改个人信息</a></span>
+        <li class="welcome"><label><%= user.name %></label>,您好<input type="hidden" value="<%=user.userid %>" id="userid"/></li>
+        <span class="setUserInfo"><a href="/logout">注销登录</a></span>
     </ul>
 
     <form name="supplyForm" method="post" action="" id="supplyForm">
         <div class="select-wrap  mt20">
-            <span>当前的余额有<a href="javascript:;" class="red"><%= user.property %></a>元</span>
+            <span>当前的余额有<a href="javascript:;" class="red property"><%= user.property %></a>元</span>
             <span><a type="button" class="btn btn-warning" onclick="recharge()">充值</a></span>
             <span><a type="button" class="btn btn-warning" onclick="withdraw()">取款</a></span>
         </div>

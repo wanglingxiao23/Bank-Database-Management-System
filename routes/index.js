@@ -5,7 +5,7 @@ var conn = require('db');
 /* GET home page. */
 
 router.get('/',function(req,res){
-        res.render('add_admin');
+        res.render('login');
 });
 
 /* GET login page. */
@@ -19,7 +19,7 @@ router.post('/login/admin',function(req,res,next) {
     var adminPsd = req.body.adminpsd;
     console.log(req.body);
         conn.query('select * from admin_info where admin_tel="'+adminTel+'"and admin_psd="'+adminPsd+'"', function (error, results) {
-            console.log(results);
+            //console.log(results);
             if (error) {
                 console.log(error.message);
                 res.redirect('/404');
@@ -37,14 +37,14 @@ router.post('/login/user',function(req,res,next) {
     var userpsd = req.body.userpsd;
     console.log(req.body);
     conn.query('select * from user where username="'+username+'"and userpsd="'+userpsd+'"', function (error, results) {
-        console.log(results);
+        //console.log(results);
         if (error) {
             console.log(error.message);
             res.redirect('/404');
         } else if (results == '' || results == null) {
             res.send(200,{data:1});
         } else {
-            var limit = results[0].limit;
+            var limit = results[0].limits;
             if(limit == 0){
                 res.send(200,{data:2});
             }else if(limit == 1){
@@ -57,39 +57,50 @@ router.post('/login/user',function(req,res,next) {
         }
     });
 });
+//注销登录
+router.get('/userlogout',function(req,res){
+    req.session.userid = '';
+    res.redirect('/login');
+});
+//注销登录
+router.get('/adminlogout',function(req,res){
+    req.session.adminid = '';
+    res.redirect('/login');
+});
 /* GET userindex page. */
 router.get('/userindex',checkUserLogin);
 router.get('/userindex',function(req,res){
     var userid = req.session.userid;
     var user = {};
     var notes = [];
-    var note = {};
-    conn.query('select user_name from user_info where userid="'+userid+'"',function(error,results){
+    user.userid = userid;
+    conn.query('select * from user_info where userid="'+userid+'"',function(error,results1){
         if(error){
             console.log(error.message);
             res.redirect('/404');
         }else{
-            user.name = results[0].user_name;
-            conn.query('select * from property where userid="'+userid+'"',function(error,results){
+            user.name = results1[0].user_name;
+            conn.query('select * from property where userid="'+userid+'"',function(error,results2){
                 if(error){
                     console.log(error.message);
                     res.redirect('/404');
                 }else{
-                    user.property = results[0].sum;
-                    conn.query('select * from history where userid="'+userid+'"',function(error,results){
+                    user.property = results2[0].sum;
+                    conn.query('select * from history where userid="'+userid+'"',function(error,results3){
                         if(error){
                             console.log(error.message);
                             res.redirect('/404');
                         }else{
-                            console.log(results);
-                            for(var i=0;i<results.length;i++){
-                                note.date = results[i].date;
-                                note.status = results[i].status;
-                                note.amount = results[i].amount;
+                            //console.log(results3);
+                            results3.forEach(function(results){
+                                var note = {};
+                                note.date = results.date;
+                                note.status = results.status;
+                                note.amount = results.amount;
                                 notes.push(note);
-                            }
-                            console.log(user);
-                            console.log(notes);
+                            });
+                            //console.log(user);
+                            //console.log(notes);
                             res.render('userIndex',{user:user,notes:notes});
                         }
                     });
@@ -98,71 +109,118 @@ router.get('/userindex',function(req,res){
         }
     });
 });
+//检测支付密码
+router.post('/user/checkPaypsd',function(req,res){
+    var paypsd = req.body.paypsd;
+    var userid = req.body.userid;
+    conn.query('select * from user_info where userid="'+userid+'"and paypsd="'+ paypsd +'"',function(error,results){
+        if(error){
+            console.log(error.message);
+            res.redirect('/404');
+        } else if (results == '' || results == null) {
+            res.send(200,{data:1});
+        } else{
+            res.send(200,{data:0});
+        }
+    });
+});
 //用户取款操作
 router.post('/user/withdraw',function(req,res){
-    
+    var userid = req.body.userid;
+    var amount = req.body.amount;
+    conn.query('update property set sum=sum-'+amount+' where userid="'+userid+'"',function(error,results){
+        if(error){
+            console.log(error.message);
+            res.redirect('/404');
+        } else {
+            conn.query('select * from property where userid="'+userid+'"',function(error,results){
+                if(error){
+                    console.log(error.message);
+                    res.redirect('/404');
+                } else {
+                    var sum = results[0].sum;
+                    res.send(200,{data:0,sum:sum});
+                }
+            });
+        }
+    });
+});
+//用户存款操作
+router.post('/user/recharge',function(req,res){
+    var userid = req.body.userid;
+    var amount = req.body.amount;
+    conn.query('update property set sum=sum+'+amount+' where userid="'+userid+'"',function(error,results){
+        if(error){
+            console.log(error.message);
+            res.redirect('/404');
+        } else {
+            conn.query('select * from property where userid="'+userid+'"',function(error,results){
+                if(error){
+                    console.log(error.message);
+                    res.redirect('/404');
+                } else {
+                    var sum = results[0].sum;
+                    res.send(200,{data:0,sum:sum});
+                }
+            });
+        }
+    });
 });
 /* GET adminindex page. */
 //管理员主页
-router.get('/adminindex',checkAdminLogin);
-router.get('/adminindex',function(req,res){
-    res.redirect('/adminindex/0');
-});
-router.get('/adminindex/:status',checkUserLogin);
+router.get('/adminindex/:status',checkAdminLogin);
 router.get('/adminindex/:status',function(req,res){
-    var status = req.body.status;
+    var status = req.params.status;
+    //console.log(req.params);
     var adminid = req.session.adminid;
     var admin = {};
-    admin.prenum == 0;
-    admin.afternum == 0;
+    admin.prenum = 0;
+    admin.afternum = 0;
     var accounts = [];
     var preaccounts = [];
     var afteraccounts = [];
-    var account = {};
-    conn.query('select * from admin_info where adminid="'+ adminid +'"',function(error,results) {
+    conn.query('select * from admin_info where adminid="'+ adminid +'"',function(error,results1) {
         if (error) {
             console.log(error.message);
             res.redirect('/404');
         } else {
-            admin.name = results[0].admin_name;
-            conn.query('select * from user', function (error, results) {
+            //console.log(results1);
+            admin.name = results1[0].admin_name;
+            conn.query('select * from user,user_info where user.userid=user_info.userid;', function (error, results) {
                 if (error) {
                     console.log(error.message);
                     res.redirect('/404');
                 } else {
+                    //console.log(results);
                     admin.allcredit = results.length;
-                    for (var i = 0; i < results.length; i++) {
+                    for(var i=0;i<results.length;i++){
+                        var account = {};
                         account.id = results[i].userid;
                         account.username = results[i].username;
                         account.creditnum = results[i].creditnum;
-                        account.limit = results[i].limit;
+                        account.limit = results[i].limits;
                         var time = results[i].time;
                         account.time = getTime(time);
                         account.hour = getHour(time);
-                        if(account.limit == 0){
-                            account.prenum++;
-                        }else if(account.limit == 1){
-                            account.afternum++;
-                        }
-                        conn.query('select * from user_info where userid="' + account.id + '"', function (error, results) {
-                            if (error) {
-                                console.log(error.message);
-                                res.redirect('/404');
-                            } else {
-                                account.name = results[0].user_name;
-                                account.tel = results[0].user_tel;
-                                account.ID_no = results[0].ID_no;
-                                account.sex = results[0].sex;
-                                account.addr = results[0].addr;
-                            }
-                        });
-                        if(account.limit == 0){
+                        account.name = results[i].user_name;
+                        account.tel = results[i].user_tel;
+                        account.ID_no = results[i].ID_no;
+                        account.sex = results[i].sex;
+                        account.addr = results[i].addr;
+                        //console.log(account);
+                        if (account.limit == 0) {
+                            admin.prenum++;
                             preaccounts.push(account);
-                        }else if(account.limit == 1){
+                        } else {
+                            admin.afternum++;
                             afteraccounts.push(account);
                         }
                         accounts.push(account);
-                    }
+                        //console.log(accounts);
+                    };
+                    //console.log(accounts);
+                    //console.log(preaccounts);
+                    //console.log(afteraccounts);
                     if(status == 0){
                         res.render('adminIndex', {admin: admin, accounts: accounts});
                     }else if(status == 1){
@@ -176,11 +234,11 @@ router.get('/adminindex/:status',function(req,res){
     });
 });
 //管理员审核操作
-router.post('/adminindex/',function(req,res){
+router.post('/adminindex',function(req,res){
     var userid = req.body.userid;
     var state  = req.body.state;
     if(state == 0){
-        conn.query('update user set limit=1 where userid="'+userid+'"',function(error,results){
+        conn.query('update user set limits=1 where userid="'+userid+'"',function(error,results){
             if(error){
                 console.log(error.message);
                 res.redirect('/404');
@@ -189,7 +247,7 @@ router.post('/adminindex/',function(req,res){
             }
         });
     }else if(state == 1){
-        conn.query('update user set limit=2 where userid="'+userid+'"',function(error,results){
+        conn.query('update user set limits=2 where userid="'+userid+'"',function(error,results){
             if(error){
                 console.log(error.message);
                 res.redirect('/404');
@@ -326,31 +384,27 @@ function checkUserLogin(req, res, next) {
     console.log(req.session);
     if (!req.session.userid) {
         res.redirect('/login');
+    }else{
+        next();
     }
-    next();
 }
-function checkAdminLogin(req, res) {
+function checkAdminLogin(req, res,next) {
     console.log(req.session);
     if (!req.session.adminid) {
         res.redirect('/login');
+    }else{
+        next();
     }
-    next();
 }
 function getTime(date){
-    var time = "";
-    var year = date.getFullYear().toString();
-    var month = date.getMonth().toString();
-    var day  = date.getDate().toString();
-    time = year+"-"+month+"-"+day;
-    return time;
+    var time = date.split(' ');
+    var dayTime = time[0];
+    return dayTime;
 }
 function getHour(date){
-    var time = "";
-    var hour = date.getHours().toString();
-    var minite = date.getMinutes().toString();
-    var second  = date.getSeconds().toString();
-    time = hour+":"+minite+":"+second;
-    return time;
+    var time = date.split(' ');
+    var dayTime = time[1];
+    return dayTime;
 }
 
 module.exports = router;
