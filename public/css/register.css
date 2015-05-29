@@ -34,7 +34,7 @@ body{
 .ButtonPa1{ 
     margin:50px 50px 0 0;
 }
-.tel-error,.tel-warning,.psd-error,.name-null,.psd-null,.user-warning,.user-error{
+.tel-error,.tel-warning,.psd-error,.psd-error1,.name-null,.psd-null,.user-warning,.user-error{
     float: right;
     margin: -25px 130px 0 0;
     display: none;

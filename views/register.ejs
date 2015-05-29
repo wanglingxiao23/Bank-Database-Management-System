@@ -23,7 +23,7 @@
         <div class="panel-body cbody">
             <h4 class="breadcrumb">随机产生的账号为：<b>6222 0236 0208 <%= cardNum %></b></h4>
 
-            <form>
+            <form id="add_admin" action="/reg" method="post">
                 <legend>账户信息</legend>
                 <input type="hidden" value="622202360208<%= cardNum%>" name="creditnum"/>
                 <div class="">
@@ -51,6 +51,22 @@
                     </div>
                     <label class="control-label psd-error" for="inputError">两次密码输入不一致！</label>
                 </div>
+                <div>
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">支付密码：</span>
+                        <input type="password" class="form-control recheckNull" name="paypsd" id="paypsd">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label psd-null" for="inputError">请输入密码！</label>
+                </div>
+                <div class>
+                    <div class="input-group input_position">
+                        <span class="input-group-addon">再次输入：</span>
+                        <input type="password" class="form-control" id="rePassword1">
+                        <span class="glyphicon glyphicon-ok form-control-feedback gl" style="display: none;"></span>
+                    </div>
+                    <label class="control-label psd-error1" for="inputError">两次密码输入不一致！</label>
+                </div>
                 <legend>个人信息</legend>
                 <div>
                     <div class="input-group input_position">
@@ -62,8 +78,8 @@
                 </div>
                 <div class="input-group input_position">
                     <span class="input-group-addon">性别：</span>
-                    <span class="input-group-addon"><input type="radio" name="sex" value="male" class="" checked>男</span>
-                    <span class="input-group-addon"><input type="radio" name="sex" value="female" class="">女</span>
+                    <span class="input-group-addon"><input type="radio" name="sex" value="0" class="" checked>男</span>
+                    <span class="input-group-addon"><input type="radio" name="sex" value="1" class="">女</span>
                 </div>
                 <div>
                     <div class="input-group input_position">
@@ -86,7 +102,7 @@
                     <input type="text" class="form-control" name="userAddr" id="userAddr">
                 </div>
                 <div class="ButtonPa1 tc">
-                    <button type="submit" class="mr30 btn btn-default btn-lg" id="register" disabled>添加</button>
+                    <button type="submit" class="mr30 btn btn-default btn-lg" id="addadmin" disabled>添加</button>
                     <button type="button" class="btn btn-default btn-lg">取消</button>
                 </div>
             </form>

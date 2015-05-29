@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)http://test.boss.qipeipu.net/bs/stockRecord/find/index -->
-<html lang="zh-CN" class="ks-webkit537 ks-webkit ks-chrome41 ks-chrome">
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="pragma" content="no-cache">
@@ -17,7 +16,7 @@
 <div class="main-cont">
     <ul class="tab_change cf ">
         <li class="welcome"><label><%= user.name %></label>,您好<input type="hidden" value="<%=user.userid %>" id="userid"/></li>
-        <span class="setUserInfo"><a href="/logout">注销登录</a></span>
+        <span class="setUserInfo"><a href="/userlogout">注销登录</a></span>
     </ul>
 
     <form name="supplyForm" method="post" action="" id="supplyForm">
@@ -52,7 +51,10 @@
                         <% }else{ %>
                         <span class="list-wid18"><b class="repair_label">取出</b></span>
                         <% } %>
-                        <span class="list-wid18"><a href="javascript:;" class="orange_text find_modify repair_label" onclick="delete()">删除记录</a></span>
+                        <span class="list-wid18">
+                            <a href="javascript:;" class="orange_text find_modify repair_label delete">删除记录</a>
+                            <input type="hidden" value="<%= note.hisid %>"/>
+                        </span>
                     </div>
                 </div>
                 <% }) %>

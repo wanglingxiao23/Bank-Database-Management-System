@@ -86,7 +86,7 @@ router.get('/userindex',function(req,res){
                     res.redirect('/404');
                 }else{
                     user.property = results2[0].sum;
-                    conn.query('select * from history where userid="'+userid+'"',function(error,results3){
+                    conn.query('select * from history where userid="'+userid+'"and deleted=0',function(error,results3){
                         if(error){
                             console.log(error.message);
                             res.redirect('/404');
@@ -94,6 +94,7 @@ router.get('/userindex',function(req,res){
                             //console.log(results3);
                             results3.forEach(function(results){
                                 var note = {};
+                                note.hisid = results.hisid;
                                 note.date = results.date;
                                 note.status = results.status;
                                 note.amount = results.amount;
@@ -128,18 +129,19 @@ router.post('/user/checkPaypsd',function(req,res){
 router.post('/user/withdraw',function(req,res){
     var userid = req.body.userid;
     var amount = req.body.amount;
-    conn.query('update property set sum=sum-'+amount+' where userid="'+userid+'"',function(error,results){
-        if(error){
+    var time   = (new Date()).format("yyyy-MM-dd hh:mm:ss");
+    conn.query('insert into history (userid,amount,status,date,deleted) values("'+userid+'","'+amount+'",1,"'+time+'",0)',function(error,results) {
+        if (error) {
             console.log(error.message);
             res.redirect('/404');
         } else {
-            conn.query('select * from property where userid="'+userid+'"',function(error,results){
-                if(error){
+            conn.query('select * from property where userid="' + userid + '"', function (error, results) {
+                if (error) {
                     console.log(error.message);
                     res.redirect('/404');
                 } else {
                     var sum = results[0].sum;
-                    res.send(200,{data:0,sum:sum});
+                    res.send(200, {data: 0, sum: sum});
                 }
             });
         }
@@ -149,23 +151,37 @@ router.post('/user/withdraw',function(req,res){
 router.post('/user/recharge',function(req,res){
     var userid = req.body.userid;
     var amount = req.body.amount;
-    conn.query('update property set sum=sum+'+amount+' where userid="'+userid+'"',function(error,results){
-        if(error){
+    var time   = (new Date()).format("yyyy-MM-dd hh:mm:ss");
+    conn.query('insert into history (userid,amount,status,date,deleted) values("'+userid+'","'+amount+'",0,"'+time+'",0)',function(error,results) {
+        if (error) {
             console.log(error.message);
             res.redirect('/404');
         } else {
-            conn.query('select * from property where userid="'+userid+'"',function(error,results){
-                if(error){
+            conn.query('select * from property where userid="' + userid + '"', function (error, results) {
+                if (error) {
                     console.log(error.message);
                     res.redirect('/404');
                 } else {
                     var sum = results[0].sum;
-                    res.send(200,{data:0,sum:sum});
+                    res.send(200, {data: 0, sum: sum});
                 }
             });
         }
     });
 });
+//删除记录
+router.post('/user/delete',function(req,res){
+    var hisid = req.body.hisid;
+    conn.query('update history set deleted=1 where hisid="'+hisid+'"',function(error,results){
+        if(error){
+            console.log(error.message);
+            res.redirect('/404');
+        }else {
+            res.send(200,{data:0});
+        }
+    });
+});
+
 /* GET adminindex page. */
 //管理员主页
 router.get('/adminindex/:status',checkAdminLogin);
@@ -275,17 +291,18 @@ router.get('/reg', function(req, res, next) {
 });
 
 router.post('/reg', function(req, res, next) {
-    var username  = req.body.username;
+    var username  = req.body.userName;
     var creditnum = req.body.creditnum;
-    var userpsd   = req.body.adminPsd;
-    var user_name = req.body.user_name;
+    var userpsd   = req.body.userPsd;
+    var user_name = req.body.userRelName;
     var ID_no     = req.body.ID_no;
-    var user_tel  = req.body.user_tel;
+    var user_tel  = req.body.userTel;
     var sex       = req.body.sex;
     var addr      = req.body.addr;
     var paypsd    = req.body.paypsd;
-    var time      = Date.now();
-    conn.query('insert into user (username,userpsd,limit,creditnum,time) values("'+ username+'","'+userpsd+'",0,"'+creditnum+'","'+time+'")',function(error,results){
+    var time      = (new Date()).format("yyyy-MM-dd hh:mm:ss");
+    console.log(time);
+    conn.query('insert into user (username,userpsd,limits,creditnum,time) values("'+ username+'","'+userpsd+'",0,"'+creditnum+'","'+time+'")',function(error,results){
         if(error){
             console.log(error.message);
             res.redirect('/404');
@@ -296,32 +313,23 @@ router.post('/reg', function(req, res, next) {
                     res.redirect('/404');
                 }else{
                     var userid = results[0].userid;
-                    conn.query('insert into user_info values("'+ userid+'","'+user_name+'","'+user_tel+'","'+ID_no+'","'+sex+'","'+addr+'","'+paypsd+'")',function(error,results){
+                    conn.query('insert into user_info (userid,user_name,user_tel,ID_no,sex,addr,paypsd) values("'+ userid+'","'+user_name+'","'+user_tel+'","'+ID_no+'","'+sex+'","'+addr+'","'+paypsd+'")',function(error,results){
                         if(error){
                             console.log(error.message);
                             res.redirect('/404');
                         }else{
-                            conn.query('insert into history values("'+ userid+'","'+0+'")',function(error,results){
-                                if(error){
-                                    console.log(error.message);
-                                    res.redirect('/404');
-                                }else{
-                                    req.session.userid = userid;
-                                    res.redirect('/userindex');
-                                }
-                            });
+                            res.redirect('/login');
                         }
                     });
                 }
             });
         }
     });
-    console.log(adminPsd);
 });
 
 router.post('/reg/check', function(req, res, next){
     var user = req.body;
-    var userName = admin.userName;
+    var userName = user.username;
     console.log(userName);
     conn.query('select * from user where username="'+userName+'"', function (error, results) {
         console.log(results);
@@ -329,9 +337,9 @@ router.post('/reg/check', function(req, res, next){
             console.log(error.message);
             res.redirect('/404');
         } else if (results == '' || results == null) {
-            res.send(200,{data:1});
-        } else {
             res.send(200,{data:0});
+        } else {
+            res.send(200,{data:1});
         }
     });
 });
@@ -351,10 +359,9 @@ router.post('/add', function(req, res, next) {
             console.log(error.message);
             res.redirect('/404');
         }else{
-            res.redirect('/login');
+            res.redirect('/adminindex/0');
         }
     });
-    console.log(adminPsd);
 });
 
 router.post('/add/check', function(req, res, next){
@@ -367,9 +374,9 @@ router.post('/add/check', function(req, res, next){
             console.log(error.message);
             res.redirect('/404');
         } else if (results == '' || results == null) {
-            res.send(200,{data:1});
-        } else {
             res.send(200,{data:0});
+        } else {
+            res.send(200,{data:1});
         }
     });
 });
@@ -406,5 +413,31 @@ function getHour(date){
     var dayTime = time[1];
     return dayTime;
 }
-
+Date.prototype.format = function(format) {
+    var o = {
+        "M+": this.getMonth() + 1,
+        // month
+        "d+": this.getDate(),
+        // day
+        "h+": this.getHours(),
+        // hour
+        "m+": this.getMinutes(),
+        // minute
+        "s+": this.getSeconds(),
+        // second
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        // quarter
+        "S": this.getMilliseconds()
+        // millisecond
+    };
+    if (/(y+)/.test(format) || /(Y+)/.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return format;
+};
 module.exports = router;

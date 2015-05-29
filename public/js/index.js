@@ -1,6 +1,33 @@
 /**
  * author wlx
  */
+//=====================登录页面回车键登录============================//
+$('#adminlogin').on('click',function(){
+    adminlogin();
+});
+$('#userlogin').on('click',function(){
+    userlogin();
+});
+$('#username').on('keydown',function(){
+    if(enterkey()){
+        $('#userlogin').click();
+    }
+});
+$('#userpsd').on('keydown',function(){
+    if(enterkey()){
+        $('#userlogin').click();
+    }
+});
+$('#adminpsd').on('keydown',function(){
+    if(enterkey()){
+        $('#adminlogin').click();
+    }
+});
+$('#admintel').on('keydown',function(){
+    if(enterkey()){
+        $('#adminlogin').click();
+    }
+});
 //=====================添加管理员页面add_admin.html============================//
 $('#adminTel').on('blur',function(){telCheck();allCheck(4);});
 $('#adminTel').on('focus',hideTelCheck);
@@ -8,20 +35,23 @@ $('#adminTel').on('focus',hideTelCheck);
 $('#rePassword').on('blur',function(){repsdCheck();allCheck(4);});
 $('#rePassword').on('focus',hidePsdCheck);
 
+$('#rePassword1').on('blur',function(){repsdCheck1();allCheck(4);});
+$('#rePassword1').on('focus',hidePsdCheck1);
+
 $('.checkNull').on('blur',function(){check($(this));allCheck(4);});
 $('.checkNull').on('focus',function(){hide($(this));});
 
 //======================注册页面register.html====================//
-$('#username').on('blur',function(){telCheck();allCheck(4);});
-$('#username').on('focus',hideTelCheck);
+$('#userName').on('blur',function(){userCheck();allCheck(8);});
+$('#userName').on('focus',hideUserCheck);
 
-$('.recheckNull').on('blur',function(){check($(this));allCheck(6);});
+$('.recheckNull').on('blur',function(){check($(this));allCheck(8);});
 $('.recheckNull').on('focus',function(){hide($(this));});
 
-$('#userTel').on('blur',function(){justTelCheck();allCheck(6);});
+$('#userTel').on('blur',function(){justTelCheck();allCheck(8);});
 $('#userTel').on('focus',function(){hide($(this));});
 
-$('#ID_no').on('blur',function(){idCardCheck();allCheck(6);});
+$('#ID_no').on('blur',function(){idCardCheck();allCheck(8);});
 $('#ID_no').on('focus',function(){hide($(this));});
 //==================检测各项输入是否为空========================//
 function check($this){
@@ -44,7 +74,7 @@ function userCheck(){
     var $this = $("#userName");
     var username = $this.val();
     if(username == ""||username == null){
-        showTelCheck('error');
+        showUserCheck('error');
     }else{
         var data = {"username":username};
         var jsondata = JSON.stringify(data);
@@ -55,9 +85,9 @@ function userCheck(){
             contentType : 'application/json',
             success : function(rel){
                 if(rel.data == 0){
-                    showTelCheck('ok');
+                    showUserCheck('ok');
                 }else if(rel.data == 1){
-                    showTelCheck('warning');
+                    showUserCheck('warning');
                 }
             },
             error : function(){
@@ -159,6 +189,22 @@ function hidePsdCheck(){
     var $this = $("#rePassword");
     $this.parent().parent().removeClass();
     $(".psd-error").hide();
+}//===================检测支付密码一致性=====================//
+function repsdCheck1(){
+    var password = $("#paypsd").val();
+    var repsd = $("#rePassword1").val();
+    if(password != repsd){
+        $("#rePassword1").parent().parent().attr('class','has-error');
+        $(".psd-error1").show();
+    }else{
+        $("#rePassword1").parent().parent().attr("class","has-feedback");
+        $("#rePassword1").next().show();
+    }
+}
+function hidePsdCheck1(){
+    var $this = $("#rePassword1");
+    $this.parent().parent().removeClass();
+    $(".psd-error1").hide();
 }
 //====================检测是否输入完成========================//
 function allCheck(val){
@@ -387,12 +433,7 @@ function withdraw(){
     html += '  </div>';
     html += '  <label class="control-label withdraw" for="inputError">密码错误！</label>';
     html += '</div>';
-    html += '<script>';
-    html += '  $("#withdrawAmount").on("blur",function(){checkAmount(property,$(this));});';
-    html += '  $("#withdrawAmount").on("focus",function(){hide($(this));});';
-    html += '  $("#payPassword").on("blur",function(){checkPsd(userid,$("#payPassword").val(),$(this));});';
-    html += '  $("#payPassword").on("focus",function(){hide($(this));});';
-    html += '</script>';
+    html += '<script src="/js/checkWithdraw.js"></script>';
     art.dialog({
         title : '取款',
         content : html,
@@ -451,10 +492,7 @@ function recharge(){
     html += '  </div>';
     html += '  <label class="control-label withdraw" for="inputError">输入错误！</label>';
     html += '</div>';
-    html += '<script>';
-    html += '  $("#rechargeAmount").on("blur",function(){check($(this));});';
-    html += '  $("#rechargeAmount").on("focus",function(){hide($(this));});';
-    html += '</script>';
+    html += '<script src="/js/checkWithdraw.js"></script>';
     art.dialog({
         title : '充值',
         content : html,
@@ -501,39 +539,31 @@ function recharge(){
         }]
     })
 }
-function checkPayPsd(userId,paypsd,$this){
-    var value = $this.val();
-    if(value == ""||value == null){
-        $this.parent().parent().attr('class','has-error');
-        $this.parent().next().show();
-    }else{
-        var data = {'userid':userId,'paypsd':paypsd};
+$('.delete').on('click',deleteNote);
+function deleteNote(){
+    if(confirm("确定要删除吗？")) {
+        var hisid = $(this).next().val();
+        var data = {'hisid': hisid};
         var jsondata = JSON.stringify(data);
         $.ajax({
-            url : '/user/checkPaypsd',
-            type : 'post',
-            data : jsondata,
-            contentType : 'application/json',
-            success : function(rel){
+            url: '/user/delete',
+            type: 'post',
+            data: jsondata,
+            contentType: 'application/json',
+            success: function (rel) {
                 if(rel.data == 0){
-                    $this.parent().parent().attr("class","has-feedback");
-                    $this.next().show();
-                }else if(rel.data == 1) {
-                    $this.parent().parent().attr('class','has-error');
-                    $this.parent().next().show();
+                    alert('删除成功！');
+                    window.location.reload();
+                }else{
+                    alert('删除失败！');
+                    return true;
                 }
+            },
+            error : function(){
+                alert("服务器请求错误！");
+                document.location.href='/404';
             }
         });
-    }
-}
-function checkAmount(property,$this){
-    var value = $this.val();
-    if(value == ""||value == null||value > property){
-        $this.parent().parent().attr('class','has-error');
-        $this.parent().next().show();
-    }else{
-        $this.parent().parent().attr("class","has-feedback");
-        $this.next().show();
     }
 }
 //================================================================================================//
@@ -598,4 +628,12 @@ function userlogin(){
             window.location.href = '/login';
         }
     });
+}
+//=======================================检测确定键====================================================//
+function enterkey(){
+    if(event.keyCode == 13){
+        return true;
+    }else{
+        return false;
+    }
 }
